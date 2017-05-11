@@ -57,8 +57,9 @@
 </template>
 
 <script>
-	import menu from '../data/menu.json'
-	import logo  from '../assets/images/3.png'
+	import MENU from '../../config/menu.js';
+	import logo  from '../../assets/images/3.png';
+    import SweetAlert from '../../services/sweetalert';
 	export default {
 		data() {
 			return {
@@ -66,7 +67,7 @@
 				collapsed:false,
 				sysUserName: '迪安',
 				sysUserAvatar: logo,
-				menuList:menu,
+				menuList:MENU,
 				form: {
 					name: '',
 					region: '',
@@ -115,7 +116,9 @@
 		},
 		mounted() {
 			var user = sessionStorage.getItem('user');
+
 			if (user) {
+
 				user = JSON.parse(user);
 				this.sysUserName = user.name || '';
 				this.sysUserAvatar = user.avatar || '';

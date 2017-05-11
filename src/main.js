@@ -11,9 +11,9 @@ import 'iview/dist/styles/iview.css';
 import App from './App'
 import router from './router'
 import 'font-awesome/css/font-awesome.min.css'
-import loadbar from './config/loadingBar.js'
+import Interceptor from './services/interceptor.js';
 
-let loading = new loadbar();
+let loading = new Interceptor();
 // Vue.use(ElementUI)
 Vue.use(iView)
 Vue.config.productionTip = false

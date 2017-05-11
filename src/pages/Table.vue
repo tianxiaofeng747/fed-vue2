@@ -163,7 +163,6 @@
 				{"auditLog":{"interface_code":this.from.search_interface_code,"result":this.from.result.value,"event_type":this.from.type.value,
 				"subscriber_appcode":this.from.search_subscriber_appcode,"begin_time":this.startTime,"end_time":this.endTime,"pageIndex":this.pageIndex,"pageSize":this.pageSize}})
 				.then(function(re){
-					console.log(re)
 						self.data1=[];
 						self.users=[];
 						re.data.rows.forEach(function(item,index){

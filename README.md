@@ -1,6 +1,6 @@
-# ysj
+# fed-vue2
 
-> ysj
+> 基于iView + vue2 的前端脚手架项目   
 
 ## Build Setup
 
