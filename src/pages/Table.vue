@@ -42,7 +42,7 @@
 				</Form>
 			</Col>
 			<Col span="24">
-				<Table border :columns="columns" :data="data1"></Table>
+				<Table border :columns="columns" :data="data1" highlight-row="true" style="width:100% !important"></Table>
 			</Col>
 			<Col span="24">
 				<Page :total="total" :page-size="pageSize" :current="pageIndex" @on-change="changePage" @on-page-size-change="changeSize"show-elevator show-sizer show-total></Page>

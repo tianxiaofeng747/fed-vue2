@@ -4,6 +4,7 @@
 			<Col span="10" class="logo" :class="collapsed?'logo-collapse-width':'logo-width'">
 				{{collapsed?'':sysName}}
 			</Col>
+			<!--toggle切换-->
 			<Col span="10">
 				<div class="tools" @click.prevent="collapse">
 					<i class="fa fa-align-justify"></i>
@@ -11,11 +12,11 @@
 			</Col>
 			<Col  span="4" class="userinfo">
 				<Dropdown trigger="hover">
-					<span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" />欢迎�? ,  {{sysUserName}}</span>
+					<span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" />欢迎您 ,  {{sysUserName}}</span>
 					<Dropdown-menu slot="dropdown">
 						<Dropdown-item>我的消息</Dropdown-item>
 						<Dropdown-item>设置</Dropdown-item>
-						<Dropdown-item divided @click.native="logout">退出登�?</Dropdown-item>
+						<Dropdown-item divided @click.native="logout">退出登入?</Dropdown-item>
 					</Dropdown-menu>
 				</Dropdown>
 			</Col>
@@ -23,20 +24,53 @@
 		<Col span="24" class="main">
 			<aside :class="collapsed?'menu-collapsed':'menu-expanded'">
 				<!--导航菜单-->
-				 <Menu  accordion width="230px">
+				 <Menu  accordion width="230px" v-show="!collapsed" theme="dark">
 					<Submenu v-for="item in menuList"  :name="item.name" :key="item.name" >
 						<template slot="title">
-							<Icon type="ios-paper"></Icon>
+							<Icon :type="item.icon"></Icon>
 							{{item.name}}
 						</template>
-						<Menu-item v-for="son in item.son" :name="son.name" :key="son.name">
-							<router-link :to="{name:son.state}">{{son.name}}</router-link>
-                        </Menu-item>
+						
+							<Menu-item v-for="son in item.son" :name="son.name" :key="son.name" class="sonlist">
+								<router-link :to="{name:son.state}">{{son.name}}</router-link>
+							</Menu-item>
 					</Submenu>
 				</Menu>
+				
+				<ul   v-show="collapsed" ref="menuCollapsed">
+					<li v-for="(item,index) in menuList"  class="submenu">
+						<template v-if="item.son">
+							<div class="submenu__title" style="padding-left: 20px;" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)"><Icon :type="item.icon"></Icon></div>
+							<ul class="submenu_item" :class="'submenu-hook-'+index" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)"> 
+								<li v-for="child in item.son" v-if="!child.hidden" :key="child.state" class="el-menu-item" style="padding-left: 40px;" :class="$route.path==child.state?'is-active':''" @click="$router.push(child.state)">{{child.name}}</li>
+							</ul>
+						</template>
+						<template v-else>
+							<li class="submenu">
+								<div class="submenu__title " style="padding-left: 20px;height: 56px;line-height: 56px;padding: 0 20px;" :class="$route.path==item.state?'is-active':''" @click="$router.push(item.state)"><Icon :type="item.icon"></Icon></div>
+							</li>
+						</template>
+					</li>
+				</ul>
+<!--
+				<ul class="ivu-menu ivu-menu-dark ivu-menu-vertical" style="width: 60px;">
+					<li  class="ivu-menu-submenu" v-for="(item,index) in menuList" :class="item.son?'ivu-menu-item-active ivu-menu-opened':''">
+						<template v-if="item.son">
+								<div class="ivu-menu-submenu-title" style="padding-left: 20px;" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)"><Icon :type="item.icon"></Icon></div>
+								<ul class="ivu-menu" :class="'submenu-hook-'+index" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)">
+									<li  v-for="child in item.son"  v-if="!child.hidden" :key="child.state"   style="padding-left: 40px;" class="sonlist ivu-menu-item" :class="$route.path==child.state?'is-active':''" @click="$router.push(child.state)">{{child.name}}
+									</li>
+								</ul>
+						</template>
+						<template v-else>
+							<div class="ivu-menu-submenu-title" style="padding-left: 20px;height: 56px;line-height: 56px;padding: 0 20px;"  :class="$route.path==item.state?'is-active':''" @click="$router.push(item.state)"><Icon :type="item.icon"></Icon></div>
+						</template>
+					</li>
+				</ul>
+				-->
 			</aside>
 			<section class="content-container">
-			<div class="grid-content bg-purple-light">
+				<div class="grid-content bg-purple-light">
 				<Col span="24" class="breadcrumb-container">
 					<strong class="title">{{$route.name}}</strong>
 					<Breadcrumb separator="/" class="breadcrumb-inner">
@@ -63,7 +97,7 @@
 	export default {
 		data() {
 			return {
-				sysName:'云审计系�?',
+				sysName:'云审计系统',
 				collapsed:false,
 				sysUserName: '迪安',
 				sysUserAvatar: logo,
@@ -92,7 +126,7 @@
 			},
 			handleselect: function (a, b) {
 			},
-			//退出登�?
+			//退出登��?
 			logout: function () {
 				var _this = this;
 				this.$confirm('确认退出吗?', '提示', {
@@ -104,9 +138,10 @@
 
 				});
 			},
-			//折叠导航�?
+			//折叠导航��?
 			collapse:function(){
 				this.collapsed=!this.collapsed;
+				window.resize()
 			},
 			showMenu(i,status){
 				this.$refs.menuCollapsed.getElementsByClassName('submenu-hook-'+i)[0].style.display=status?'block':'none';
@@ -128,9 +163,6 @@
 </script>
 
 <style scoped lang="scss">
-    .ivu-menu{
-        a { display: block;}
-    }
 	.container {
 		position: absolute;
 		top: 0px;
@@ -191,7 +223,6 @@
 		}
 		.main {
 			display: flex;
-			// background: #324057;
 			position: absolute;
 			top: 60px;
 			bottom: 0px;
@@ -199,27 +230,50 @@
 			aside {
 				flex:0 0 230px;
 				width: 230px;
-				// position: absolute;
-				// top: 0px;
-				// bottom: 0px;
-				.el-menu{
-					height: 100%;
-				}
-				.collapsed{
-					width:60px;
-					.item{
-						position: relative;
+				background: #464C58;
+					.sonlist{
+						a{
+							display:block;
+							color:#fff;
+							
+						}
 					}
 					.submenu{
-						position:absolute;
-						top:0px;
-						left:60px;
-						z-index:99999;
-						height:auto;
-						display:none;
-					}
+						height:60px;
+						position:relative;
+						&:hover{
+							background:#e4e8f1;
+							cursor:pointer;
+							i{
+								color:#fff;
+							}
+						}
+						.submenu__title{
+							height:60px;
+							line-height:60px;
+							i{
+								font-size:18px;
+								color:#9ea7b4;
+							}
+						}
+						.submenu_item{
+							position:absolute;
+							top:0;
+							left:60px;
+							background: #e4e8f1;
+   							z-index: 999;
+							width:134px;
+							li{
+								height:50px;
+								line-height:50px;
+								&:hover{
+									background:#dedbe5;
+								}
+							}
+						}
 
-				}
+					}
+				
 			}
 			.menu-collapsed{
 				flex:0 0 60px;
@@ -229,18 +283,12 @@
 				flex:0 0 230px;
 				width: 230px;
 			}
+
 			.content-container {
-				// background: #f1f2f7;
 				flex:1;
-				// position: absolute;
-				// right: 0px;
-				// top: 0px;
-				// bottom: 0px;
-				// left: 230px;
 				overflow-y: scroll;
 				padding: 20px;
 				.breadcrumb-container {
-					//margin-bottom: 15px;
 					.title {
 						width: 200px;
 						float: left;

@@ -1,11 +1,10 @@
 const MENU = [{
     name: "首页",
-    icon: "icon-daohang-shouye",
-    state: "home",
-    son: []
+    icon: "ios-paper",
+    state: "home"
 }, {
     name: "企业信息",
-    icon: "icon-daohang-shouye",
+    icon: "ios-paper",
     //state: "supplier",
     son: [
         {
