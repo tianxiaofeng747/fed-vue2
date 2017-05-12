@@ -30,12 +30,11 @@
 							{{item.name}}
 						</template>
 						<Menu-item v-for="son in item.son" :name="son.name" :key="son.name">
-                            <a @click="goUrl(son)">{{son.name}}</a>
+							<router-link :to="{name:son.state}">{{son.name}}</router-link>
                         </Menu-item>
 					</Submenu>
 				</Menu>
 			</aside>
-			
 			<section class="content-container">
 			<div class="grid-content bg-purple-light">
 				<Col span="24" class="breadcrumb-container">
@@ -54,7 +53,6 @@
 			</div>
 		</section>
 		</Col>
-		
 	</Row>
 </template>
 
@@ -105,12 +103,7 @@
 				}).catch(() => {
 
 				});
-
-
 			},
-            goUrl: function (item) {
-                this.$router.push({name:item.state});
-            },
 			//折叠导航栏
 			collapse:function(){
 				this.collapsed=!this.collapsed;

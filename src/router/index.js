@@ -1,21 +1,16 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Dashboard from '@/pages/dashboard/Dashboard';
-import Table from '@/pages/Table';
-import Upload from '@/pages/imgUpload/ImgUpload';
+import App from '../App'
 
-Vue.use(Router)
+const dashboard = r => require.ensure([], () => r(require('../pages/dashboard/Dashboard')), 'dashboard')
+const table = r => require.ensure([], () => r(require('../pages/Table')), 'table')
+const imgUpload = r => require.ensure([], () => r(require('../pages/imgUpload/ImgUpload')), 'imgUpload')
 
-export default new Router({
-    routes: [
-        {
-            path: '/',
-            name: 'Dashboard',
-            component: Dashboard,
-            children: [
-                {path: '/table', component: Table, name: 'table'},
-                {path: '/imgUpload', component: Upload, name: 'imgUpload'},
-            ]
-        }
+
+export default [{
+    path: '/',
+    name: 'dashboard',
+    component: dashboard,
+    children: [
+        { path: '/table', component: table, name: 'table' },
+        { path: '/imgUpload', component: imgUpload, name: 'imgUpload' },
     ]
-})
+}]

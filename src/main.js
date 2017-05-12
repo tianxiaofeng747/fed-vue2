@@ -1,33 +1,33 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
-import Vue from 'vue'
-
-// import ElementUI from 'element-ui'
-// import 'element-ui/lib/theme-default/index.css'
-
-import iView from 'iview';
-import 'iview/dist/styles/iview.css';
-
+import Vue from 'vue' 
+import VueRouter from 'vue-router'
+import routes from './router/index.js' //router配置
+import iView from 'iview'; //vue ui插件
+import 'iview/dist/styles/iview.css'; //样式
+import 'font-awesome/css/font-awesome.min.css' //字体图库
 import App from './App'
-import router from './router'
-import 'font-awesome/css/font-awesome.min.css'
 import Interceptor from './services/interceptor.js';
 
-let loading = new Interceptor();
-// Vue.use(ElementUI)
+/**
+ * router
+ */
+Vue.use(VueRouter)
+const router = new VueRouter({
+	routes,
+	mode: 'hash',
+	strict: process.env.NODE_ENV !== 'production'
+})
+/**
+ * 使用
+ */
 Vue.use(iView)
 Vue.config.productionTip = false
+/**
+ * axios拦截器
+ */
+let loading = new Interceptor();
 loading.request(iView);
 loading.response(iView);
 loading.config(iView);
-router.beforeEach((to, from, next) => {
-    iView.LoadingBar.start();
-    next();
-});
-
-router.afterEach((to, from, next) => {
-    iView.LoadingBar.finish();
-});
 
 /* eslint-disable no-new */
 new Vue({
