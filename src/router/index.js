@@ -1,16 +1,22 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Auth from '@/pages/auth/Auth';
 import Dashboard from '@/pages/dashboard/Dashboard';
 import Table from '@/pages/Table';
 import Upload from '@/pages/imgUpload/ImgUpload';
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
     routes: [
         {
-            path: '/',
-            name: 'Dashboard',
+            path:'/auth',
+            name:'auth',
+            component: Auth
+        },
+        {
+            path: '/dashboard',
+            name: 'auth',
             component: Dashboard,
             children: [
                 {path: '/table', component: Table, name: 'table'},

@@ -31,6 +31,7 @@
 						</template>
 						<Menu-item v-for="son in item.son" :name="son.name" :key="son.name">
                             <a @click="goUrl(son)">{{son.name}}</a>
+
                         </Menu-item>
 					</Submenu>
 				</Menu>
