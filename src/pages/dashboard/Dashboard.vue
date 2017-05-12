@@ -11,11 +11,11 @@
 			</Col>
 			<Col  span="4" class="userinfo">
 				<Dropdown trigger="hover">
-					<span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" />欢迎您 ,  {{sysUserName}}</span>
+					<span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" />欢迎�? ,  {{sysUserName}}</span>
 					<Dropdown-menu slot="dropdown">
 						<Dropdown-item>我的消息</Dropdown-item>
 						<Dropdown-item>设置</Dropdown-item>
-						<Dropdown-item divided @click.native="logout">退出登录</Dropdown-item>
+						<Dropdown-item divided @click.native="logout">退出登�?</Dropdown-item>
 					</Dropdown-menu>
 				</Dropdown>
 			</Col>
@@ -63,7 +63,7 @@
 	export default {
 		data() {
 			return {
-				sysName:'云审计系统',
+				sysName:'云审计系�?',
 				collapsed:false,
 				sysUserName: '迪安',
 				sysUserAvatar: logo,
@@ -92,7 +92,7 @@
 			},
 			handleselect: function (a, b) {
 			},
-			//退出登录
+			//退出登�?
 			logout: function () {
 				var _this = this;
 				this.$confirm('确认退出吗?', '提示', {
@@ -104,7 +104,7 @@
 
 				});
 			},
-			//折叠导航栏
+			//折叠导航�?
 			collapse:function(){
 				this.collapsed=!this.collapsed;
 			},
