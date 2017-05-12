@@ -29,7 +29,9 @@
 							<Icon type="ios-paper"></Icon>
 							{{item.name}}
 						</template>
-						<Menu-item v-for="son in item.son" :name="son.name" :key="son.name">{{son.name}}</Menu-item>
+						<Menu-item v-for="son in item.son" :name="son.name" :key="son.name">
+                            <a @click="goUrl(son)">{{son.name}}</a>
+                        </Menu-item>
 					</Submenu>
 				</Menu>
 			</aside>
@@ -106,6 +108,9 @@
 
 
 			},
+            goUrl: function (item) {
+                this.$router.push({name:item.state});
+            },
 			//折叠导航栏
 			collapse:function(){
 				this.collapsed=!this.collapsed;
@@ -130,7 +135,9 @@
 </script>
 
 <style scoped lang="scss">
-
+    .ivu-menu{
+        a { display: block;}
+    }
 	.container {
 		position: absolute;
 		top: 0px;

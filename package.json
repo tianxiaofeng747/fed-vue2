@@ -1,7 +1,7 @@
 {
-  "name": "ysj",
+  "name": "fed-vue2",
   "version": "1.0.0",
-  "description": "ysj",
+  "description": "前端vue2+ vue-cli + iView脚手架",
   "author": "yangjj",
   "private": true,
   "scripts": {
