@@ -28,18 +28,10 @@ module.exports = {
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
         proxyTable: {
-            '/api': {
-                target: 'http://172.30.43.243/gateway/call',
+            '/gateway': {
+                target: 'http://172.30.43.243',
                 changeOrigin: true,
                 pathRewrite: {
-                    '^/api': ''
-                }
-            },
-            '/gateway/upload':{
-                target: 'http://172.30.43.243/gateway/upload',
-                changeOrigin: true,
-                pathRewrite: {
-                    '^/gateway/upload': ''
                 }
             }
         },

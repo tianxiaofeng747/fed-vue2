@@ -6,7 +6,7 @@ import 'iview/dist/styles/iview.css'; //样式
 import 'font-awesome/css/font-awesome.min.css' //字体图库
 import App from './App'
 import Interceptor from './services/interceptor.js';
-
+import Http from  './services/Http';
 /**
  * router
  */
@@ -24,10 +24,12 @@ Vue.config.productionTip = false
 /**
  * axios拦截器
  */
-let loading = new Interceptor();
-loading.request(iView);
-loading.response(iView);
-loading.config(iView);
+Vue.prototype.Http = Http;
+iView.LoadingBar.config({
+	color: '#ff0',
+	failedColor: '#f0ad4e',
+	height: 5
+});
 
 /* eslint-disable no-new */
 new Vue({
