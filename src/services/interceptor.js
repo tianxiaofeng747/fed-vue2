@@ -1,6 +1,7 @@
 import axios from 'axios';
 import CONFIG from '../config/app.config';
 import iView from 'iview';
+import User from './User';
 //import loading from '@components/loading'
 
 const Interceptor = {
@@ -11,9 +12,12 @@ const Interceptor = {
 				return this.replace(/^\s+|\s+$/g, '');
 			};
 		}
+        function getClass(object){
+            return Object.prototype.toString.call(object).match(/^\[object\s(.*)\]$/)[1];
+        };
 		let clearNoneValueObj = (obj) => {
 			for (var i in obj) {
-				if (angular.isObject(obj[i])) {
+				if (getClass(obj[i]) == 'Object') {
 					clearNoneValueObj(obj[i]);
 				} else {
 					typeof obj[i] == String && (obj[i] = obj[i].trim() );
@@ -41,12 +45,12 @@ const Interceptor = {
 			if (CONFIG.DEV_MODE == 0) {
 				request.method = 'GET';
 				request.url = '/data/' + request.url + '.json?' + getParams(request.data || {});
-				console.log(request)
-			}else if (CONFIG.DEV_MODE == 1 && request.method == 'POST') {
-				request.url =  'gateway/call/' + request.url;
+
+			}else if (CONFIG.DEV_MODE == 1 && request.method.toLowerCase()  == 'post') {
+				request.url = '/gateway/'+ (request.url.split('.').length == 1 ? request.url : 'call');
+                request.headers.jtoken = User.msg ? User.msg.token : User.token;
 			}
 			clearNoneValueObj(request);
-			console.log(request);
 			return request;
 		}, function (error) {
 			return Promise.reject(error);

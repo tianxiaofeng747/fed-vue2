@@ -29,9 +29,10 @@ module.exports = {
         assetsPublicPath: '/',
         proxyTable: {
             '/gateway': {
-                target: 'http://172.30.43.243',
+                target: 'http://172.30.43.243/gateway',
                 changeOrigin: true,
                 pathRewrite: {
+                    '^/gateway':''
                 }
             }
         },

@@ -1,5 +1,5 @@
 const CONFIG = {
-    "DEV_MODE": 0,
+    "DEV_MODE": 1,
     "APP_CODE":"YERP",
     "SERVER": "/gateway",
     "AUTH_CLOSE" : true,

@@ -6,33 +6,29 @@
                 <form role="form" name="auth">
                     <div class="username">
                         <div class="usernameinner">
-                            <input type="text" name="username" id="username" placeholder="请输入用户名"
-                                   v-model="form.username"/>
+                            <input type="text" name="username" id="username" placeholder="请输入用户名" v-model="form.username"/>
                         </div>
                     </div>
                     <div class="password">
                         <div class="passwordinner">
-                            <input type="password" name="password" id="password" maxlength="20" placeholder="请输入密码"
-                                   v-model="form.password"/>
+                            <input type="password" name="password" id="password" maxlength="20" placeholder="请输入密码" v-model="form.password"/>
                         </div>
                     </div>
                     <div class="verify">
                         <div class="verifyimg">
-                            <img id="imageCode" class="textbox" src="" :src="verifyImg" width="80" height="40" alt="验证码"
-                                 title="点击刷新"/>
+                            <img id="imageCode" class="textbox" src="" :src="verifyImg" width="80" height="40" alt="验证码" title="点击刷新"/>
                             <a @click="refreshCode()" href="javascript:void(0)">换一张？</a>
                         </div>
                         <div class="verifycode">
 
                             <div class="verifycodeinner">
-                                <input type="text" name="verifycode" maxlength="4" id="verifycode" placeholder="验证码"
-                                       v-model="form.verifycode"/>
+                                <input type="text" name="verifycode" maxlength="4" id="verifycode" placeholder="验证码" v-model="form.verifycode"/>
                             </div>
 
                         </div>
                     </div>
                     <label id="errorMsg" v-text="errorMsg"></label>
-                    <button type="submit" @click="login()">登录</button>
+                    <button type="button" @click="login()">登录</button>
                 </form>
             </div>
         </div>
@@ -41,6 +37,8 @@
 <script type="text/javascript">
     import CONFIG from '../../config/app.config';
     import User from '../../services/User';
+    import  CryptoJS from '@/assets/js/aes/aes-min.min.js';
+    import SHA256 from  '@/assets/js/sha256/sha256.min.js';
     const URL = {
         VERIFY_CODE: '/verifycode',
     };
@@ -67,7 +65,9 @@
                     if (User.msg && User.msg.token) {
                         getRandomImg();
                     } else {
-                        User.currentUser().finally(function () {
+                        User.currentUser().then(function () {
+                            getRandomImg();
+                        },function () {
                             getRandomImg();
                         });
                     }
@@ -78,13 +78,13 @@
             login: function () {
                 var xflag = false,
                         self = this,
-                        /*clientid = APP.User ? APP.User.clientId : null,
-                         _sendData = CryptoJS.enc.Utf8.parse(SHA256(self.form.password)),
-                         _encrypted = CryptoJS.AES.encrypt(_sendData, CryptoJS.enc.Utf8.parse(clientid), {
-                         iv: CryptoJS.enc.Utf8.parse(APP.User.token),
-                         mode: CryptoJS.mode.CBC,
-                         padding: CryptoJS.pad.Iso10126
-                         }),*/
+                        clientid = User.msg ? User.msg.clientId : null,
+                        _sendData = CryptoJS.enc.Utf8.parse(SHA256(self.form.password)),
+                        _encrypted = CryptoJS.AES.encrypt(_sendData, CryptoJS.enc.Utf8.parse(clientid), {
+                            iv: CryptoJS.enc.Utf8.parse(User.msg.token),
+                            mode: CryptoJS.mode.CBC,
+                            padding: CryptoJS.pad.Iso10126
+                        }),
                         param;
 
                 if (!/^[a-zA-Z0-9_-]{6,20}$/.test(self.form.username)) {
@@ -103,10 +103,12 @@
                     self.errorMsg = self.form.verifycode == '' ? '请输入验证码' : '验证码格式不正确';
                     return;
                 }
-                param = Object.assign({}, self.form);
+                param = Object.assign({
+                    password: CryptoJS.enc.Base64.stringify(_encrypted.ciphertext)
+                }, self.form);
                 if (!xflag) {
                     User.login(param).then(function () {
-                        self.$route.push('dashboard.table');
+                        self.$router.push({name:'table'});
                     }, function (err) {
                         self.refreshCode();
                     });
@@ -114,7 +116,7 @@
             }
         },
         mounted() {
-            //this.refreshCode();
+            this.refreshCode();
         }
     }
 </script>
