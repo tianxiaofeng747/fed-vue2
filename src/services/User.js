@@ -6,9 +6,9 @@ const URL = {
 }
 let User = {
     login (data) {
-        let deferred = new Promise(function (resolve, reject) {
+        return new Promise(function (resolve, reject) {
             Http.post(URL.login, data || {}).then(result => {
-                User.msg = data.data || {};
+                User.msg = result.data || {};
                 sessionStorage.setItem('user', JSON.stringify(User.msg));
                 resolve(User.msg);
                 if (User.msg.id) {
@@ -20,23 +20,23 @@ let User = {
                 reject(err);
             });
         });
-        return deferred;
+
 
     },
     logout (data) {
-        let deferred = new Promise(function (resolve, reject) {
+        return new Promise(function (resolve, reject) {
             Http.post(URL.logout, data || {}).then(result => {
                 delete User.msg;
                 sessionStorage.clear();
-                resolve(User.msg);
+                resolve(result);
             }, err => {
                 reject(err);
             });
         });
-        return deferred;
+
     },
-    currentUser (data) {
-        let deferred = new Promise(function (resolve, reject) {
+    currentUser () {
+        return new Promise(function (resolve, reject) {
             User.msg && User.msg.enterpriseNo ? resolve(User.msg) :
                 Http.post(URL.currentUser, {
                     token: User.msg ? User.msg.token : ''
@@ -55,7 +55,6 @@ let User = {
                     reject(err);
                 });
         });
-        return deferred;
     }
 };
 

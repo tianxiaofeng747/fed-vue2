@@ -59,7 +59,7 @@
                 let config = CONFIG,
                         self = this,
                         getRandomImg = function () {
-                            self.verifyImg = config.SERVER + URL.VERIFY_CODE + '?t=' + Math.random() * 1000000;
+                            self.verifyImg = CONFIG.SERVER + URL.VERIFY_CODE + '?t=' + Math.random() * 1000000;
                         };
                 if (config.DEV_MODE == 1) { // 开发,需跨域
                     if (User.msg && User.msg.token) {
@@ -103,9 +103,9 @@
                     self.errorMsg = self.form.verifycode == '' ? '请输入验证码' : '验证码格式不正确';
                     return;
                 }
-                param = Object.assign({
+                param = Object.assign({}, self.form,{
                     password: CryptoJS.enc.Base64.stringify(_encrypted.ciphertext)
-                }, self.form);
+                });
                 if (!xflag) {
                     User.login(param).then(function () {
                         self.$router.push({name:'table'});
