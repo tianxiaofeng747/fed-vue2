@@ -24,15 +24,16 @@ module.exports = {
     dev: {
         env: require('./dev.env'),
         port: 8088,
-        autoOpenBrowser: true,
+        autoOpenBrowser: false,
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
         proxyTable: {
             '/gateway': {
-                target: 'http://172.30.43.243/gateway',
+                target: 'http://172.30.43.243',
                 changeOrigin: true,
+                logLevel:'debug',
                 pathRewrite: {
-                    '^/gateway':''
+                    //'^gateway':''
                 }
             }
         },

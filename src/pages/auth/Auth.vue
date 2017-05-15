@@ -40,7 +40,7 @@
     import  CryptoJS from '@/assets/js/aes/aes-min.min.js';
     import SHA256 from  '@/assets/js/sha256/sha256.min.js';
     const URL = {
-        VERIFY_CODE: '/verifycode',
+        VERIFY_CODE: '/verifyCode',
     };
     export default {
         data() {
@@ -59,7 +59,7 @@
                 let config = CONFIG,
                         self = this,
                         getRandomImg = function () {
-                            self.verifyImg = CONFIG.SERVER + URL.VERIFY_CODE + '?t=' + Math.random() * 1000000;
+                            self.verifyImg = CONFIG.SERVER + URL.VERIFY_CODE + '?t=' +  Math.round(Math.random() * 1000000);
                         };
                 if (config.DEV_MODE == 1) { // 开发,需跨域
                     if (User.msg && User.msg.token) {
