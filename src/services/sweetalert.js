@@ -19,6 +19,20 @@ const SweetAlert =  {
             //console.log(e);
         });
     },
+    confirm: function (opt) {
+        return swal(Object.assign({
+            confirmButtonText: '确定',
+            width: '300px',
+            //title:'提示信息',
+            type:'question',
+            showCancelButton: true,
+            cancelButtonText: '取消',
+            showLoaderOnConfirm: true,
+            allowOutsideClick: false
+        },opt|| {})).catch(function (e) {
+            //console.log(e);
+        });
+    },
     success: function (title, message) {
         return this.alert(title, message, 'success',{
             timer: '1500',

@@ -94,7 +94,7 @@
         data() {
 
             return {
-                sysName: '云审计系统',
+                sysName: '云ERP系统',
                 collapsed: false,
                 sysUserName: '',
                 sysUserAvatar: '',
@@ -126,23 +126,19 @@
             //退出登
             logout: function () {
                 var self = this;
-                SweetAlert.swal({
-                    title: '确认退出吗',
-                    cancelButtonText: '取消',
-                    confirmButtonText: '确定',
-                    width: '300px',
-                    showCancelButton: true,
-                    showLoaderOnConfirm: true,
-                    allowOutsideClick: false,
+                SweetAlert.confirm({
+                    title: '您确认退出吗?',
                     preConfirm: function () {
                         return User.logout();
                     }
                 }).then(result => {
-                    if (result.code == 'SUCCESS') {
-                        SweetAlert.success('操作成功');
-                        self.$router.push('/auth');
-                    } else {
-                        SweetAlert.error('操作失败');
+                    if(result){
+                        if (result.code == 'SUCCESS') {
+                            SweetAlert.success('操作成功');
+                            self.$router.push('/auth');
+                        } else {
+                            SweetAlert.error('操作失败');
+                        }
                     }
                 });
 

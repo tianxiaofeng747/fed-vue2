@@ -1,10 +1,11 @@
-import Vue from 'vue' 
+import Vue from 'vue';
 import VueRouter from 'vue-router'
 import routes from './router/index.js' //router配置
 import iView from 'iview'; //vue ui插件
 import 'iview/dist/styles/iview.css'; //样式
 import 'font-awesome/css/font-awesome.min.css' //字体图库
 import App from './App';
+
 import User from  './services/User';
 import Http from  './services/Http';
 /**
