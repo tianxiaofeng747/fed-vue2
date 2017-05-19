@@ -1,6 +1,6 @@
 const dashboard = r => require.ensure([], () => r(require('../pages/dashboard/Dashboard')), 'dashboard')
 const table = r => require.ensure([], () => r(require('../pages/Table')), 'table')
-const imgUpload = r => require.ensure([], () => r(require('../pages/imgUpload/ImgUpload')), 'imgUpload')
+const File = r => require.ensure([], () => r(require('../pages/imgUpload/File')), 'File')
 import Auth from '../pages/auth/Auth';
 export default [
     {
@@ -16,6 +16,7 @@ export default [
 		component: dashboard,
 		children: [
 			{path: '/table', component: table, name: 'table'},
-			{path: '/imgUpload', component: imgUpload, name: 'imgUpload'}
+			{path: '/file', component: File, name: 'File'}
 		]
-	}]
+	}
+]

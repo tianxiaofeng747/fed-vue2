@@ -13,7 +13,7 @@ const MENU = [{
         },
         {
             name: '图片上传',
-            state: 'imgUpload'
+            state: 'File'
         }
     ]
 }];

@@ -3,7 +3,7 @@
         <div class="demo-upload-list demo-upload-block" v-for="item in uploadList">
             <template v-if="item.status === 'finished'">
                 <a :href="item.fullUrl" v-boxer="item.fullUrl">
-                    <img :src="item.fullUrl">
+                    <img :src="item.thumbnail">
                 </a>
                 <div class="demo-upload-list-cover">
                     <Icon type="ios-close-empty"  @click.native="handleRemove(item)"></Icon>
@@ -14,11 +14,11 @@
             </template>
         </div>
         <div class="demo-upload-block">
-            <Upload ref="upload"
+            <Upload
                     :show-upload-list="false"
                     :default-file-list="defaultList"
                     :on-success="handleSuccess"
-                    :format="['jpg','jpeg','png']"
+                    :format="['jpg','jpeg','png','pdf']"
                     :max-size="2048"
                     :on-format-error="handleFormatError"
                     :on-exceeded-size="handleMaxSize"
@@ -34,27 +34,31 @@
     </div>
 </template>
 <script type="text/javascript">
-    import CONFIG from '../../config/app.config';
-    import '../../directive/vueDirective.js';
+    import CONFIG from '../config/app.config';
+    import '../directive/vueDirective.js';
+    import Utils from '@/services/Utils';
+    var pdf = require('@/assets/images/pdf.png')
+    var noimage = require('@/assets/images/noimage.png')
     export default {
+        name: 'FileUpload',
         data (){
             return {
                 defaultList: [
-                    {
-                        'name': 'a42bdcc1178e62b4694c830f028db5c0',
-                        'fullUrl': 'https://o5wwk8baw.qnssl.com/a42bdcc1178e62b4694c830f028db5c0/avatar'
-                    },
-                    {
-                        'name': 'bc7521e033abdd1e92222d733590f104',
-                        'fullUrl': 'https://o5wwk8baw.qnssl.com/bc7521e033abdd1e92222d733590f104/avatar'
-                    }
+
                 ],
                 imgName: '',
                 visible: false,
-                uploadList: [],
+                uploadList: [
+                    {
+                        'name': '',
+                        'thumbnail': '',
+                        'fullUrl': ''
+                    }
+                ],
                 config : CONFIG
             }
         },
+        props:['fileList','removeCallback'],
         methods: {
             handleView (name) {
                 this.imgName = name;
@@ -62,11 +66,23 @@
             },
             handleRemove (file) {
                 // 从 upload 实例删除数据
-                const fileList = this.$refs.upload.fileList;
-                this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
+                this.uploadList.splice(this.uploadList.indexOf(file), 1);
             },
             handleSuccess (res, file) {
-                file.fullUrl =  this.config.IMAGE_DOWNLOAD + JSON.parse(res).data;
+                const url = JSON.parse(res).data;
+                switch (Utils.getFileType(url)) {
+                    case 'image':
+                        file.thumbnail = this.config.IMAGE_DOWNLOAD + url;
+                        break;
+                    case 'pdf':
+                        file.thumbnail = pdf;
+                        break;
+                    default :
+                        file.thumbnail = noimage;
+                        break;
+                }
+                file.fullUrl =  this.config.IMAGE_DOWNLOAD + url;
+                this.uploadList.push(file);
             },
             handleFormatError (file) {
                 this.$Notice.warning({
@@ -90,8 +106,12 @@
                 return check;
             }
         },
+        created(){
+            this.uploadList = this.fileList;
+        },
         mounted(){
-            this.uploadList = this.$refs.upload.fileList;
+
+            console.log(this.uploadList)
         }
     }
 </script>
