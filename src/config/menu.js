@@ -12,7 +12,7 @@ const MENU = [{
             state: 'table'
         },
         {
-            name: '图片上传',
+            name: '图片上传demo',
             state: 'File'
         }
     ]

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <File-upload :ile-list.sync="list"></File-upload>
+        <File-upload :file-list.sync="list" max=1></File-upload>
         <button @click="submit">tijiao</button>
     </div>
 
@@ -11,16 +11,7 @@
         data(){
             return {
                 list:[
-                    {
-                        'name': 'a42bdcc1178e62b4694c830f028db5c0',
-                        'thumbnail': 'https://o5wwk8baw.qnssl.com/a42bdcc1178e62b4694c830f028db5c0/avatar',
-                        'fullUrl': 'https://o5wwk8baw.qnssl.com/a42bdcc1178e62b4694c830f028db5c0/avatar'
-                    },
-                    {
-                        'name': 'bc7521e033abdd1e92222d733590f104',
-                        'thumbnail': 'https://o5wwk8baw.qnssl.com/bc7521e033abdd1e92222d733590f104/avatar',
-                        'fullUrl': 'https://o5wwk8baw.qnssl.com/bc7521e033abdd1e92222d733590f104/avatar'
-                    }
+                   's2/M00/25/26/rB4r9VkePZOAaA6cAAWyhJ07vXM148.jpg'
                 ]
             }
         },

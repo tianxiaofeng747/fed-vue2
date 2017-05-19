@@ -6,7 +6,7 @@
                     <img :src="item.thumbnail">
                 </a>
                 <div class="demo-upload-list-cover">
-                    <Icon type="ios-close-empty"  @click.native="handleRemove(item)"></Icon>
+                    <Icon type="ios-close-empty" @click.native="handleRemove(item)"></Icon>
                 </div>
             </template>
             <template v-else>
@@ -14,19 +14,9 @@
             </template>
         </div>
         <div class="demo-upload-block">
-            <Upload
-                    :show-upload-list="false"
-                    :default-file-list="defaultList"
-                    :on-success="handleSuccess"
-                    :format="['jpg','jpeg','png','pdf']"
-                    :max-size="2048"
-                    :on-format-error="handleFormatError"
-                    :on-exceeded-size="handleMaxSize"
-                    :before-upload="handleBeforeUpload"
-                    multiple
-                    type="drag"
-                    :action="config.IMAGE_UPLOAD" >
-                <div >
+            <Upload ref="upload" :show-upload-list="false" :default-file-list="defaultList" :on-success="handleSuccess" :format="['jpg','jpeg','png','pdf']" :max-size="2048"
+                    :on-format-error="handleFormatError" :on-exceeded-size="handleMaxSize" :before-upload="handleBeforeUpload" multiple type="drag" :action="config.IMAGE_UPLOAD">
+                <div>
                     <Icon type="camera" size="20"></Icon>
                 </div>
             </Upload>
@@ -43,10 +33,9 @@
         name: 'FileUpload',
         data (){
             return {
-                defaultList: [
-
-                ],
+                defaultList: [],
                 imgName: '',
+                maxLength: 5,
                 visible: false,
                 uploadList: [
                     {
@@ -55,10 +44,22 @@
                         'fullUrl': ''
                     }
                 ],
-                config : CONFIG
+                config: CONFIG
             }
         },
-        props:['fileList','removeCallback'],
+        //传入文件列表->双向绑定  ， 上传失败回调 ，上传成功回调 ， 输出格式 string array
+        props: {
+            removeCallback: Function,
+            successCallback: Function,
+            exportType: String,
+            max: {
+                type: [Number, String]
+            },
+            fileList: {
+                type: Array,
+                default: []
+            }
+        },
         methods: {
             handleView (name) {
                 this.imgName = name;
@@ -66,23 +67,50 @@
             },
             handleRemove (file) {
                 // 从 upload 实例删除数据
-                this.uploadList.splice(this.uploadList.indexOf(file), 1);
+                const fileList = this.$refs.upload.fileList;
+                this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
+                this.removeCallback && this.removeCallback(file);
+                this.synchronization();
             },
-            handleSuccess (res, file) {
-                const url = JSON.parse(res).data;
-                switch (Utils.getFileType(url)) {
+            //同步
+            synchronization: function () {
+                let list = this.uploadList.map(function (item) {
+                    return item.url;
+                });
+                this.exportType && this.exportType.toLowerCase() == 'string' && (list += '');
+                this.$emit('update:fileList', list);
+            },
+            //格式化文件
+            formatFile (item, name) {
+                var self = this,
+                        thumbnail;
+                switch (Utils.getFileType(item)) {
                     case 'image':
-                        file.thumbnail = this.config.IMAGE_DOWNLOAD + url;
+                        thumbnail = self.config.IMAGE_DOWNLOAD + item;
                         break;
                     case 'pdf':
-                        file.thumbnail = pdf;
+                        thumbnail = pdf;
                         break;
                     default :
-                        file.thumbnail = noimage;
+                        thumbnail = noimage;
                         break;
                 }
-                file.fullUrl =  this.config.IMAGE_DOWNLOAD + url;
-                this.uploadList.push(file);
+                return {
+                    name: name || '',
+                    url: item,
+                    status: 'finished',
+                    thumbnail: thumbnail,
+                    fullUrl: self.config.IMAGE_DOWNLOAD + item
+                }
+            },
+            handleSuccess (res, file) {
+                const url = JSON.parse(res).data,
+                        obj = this.formatFile(url, file.name);
+                file.thumbnail = obj.thumbnail;
+                file.fullUrl = obj.fullUrl;
+                file.url = obj.url;
+                this.successCallback && this.successCallback(file);
+                this.synchronization();
             },
             handleFormatError (file) {
                 this.$Notice.warning({
@@ -97,33 +125,39 @@
                 });
             },
             handleBeforeUpload () {
-                const check = this.uploadList.length < 5;
+                const check = this.uploadList.length < this.maxLength;
                 if (!check) {
                     this.$Notice.warning({
-                        title: '最多只能上传 5 张图片。'
+                        title: '最多只能上传 ' + this.maxLength + ' 张图片。'
                     });
                 }
                 return check;
             }
         },
         created(){
-            this.uploadList = this.fileList;
+            this.maxLength = Math.round(this.max);
+            if (this.fileList && this.fileList.length) {
+                this.fileList = typeof this.fileList == 'string' ? this.fileList.split(',') : this.fileList;
+                this.defaultList = this.fileList.map((item) => {
+                    return this.formatFile(item);
+                });
+            }
         },
         mounted(){
-
-            console.log(this.uploadList)
+            this.uploadList = this.$refs.upload.fileList;
         }
     }
 </script>
 
-<style lang="scss" scoped>
-    .demo-upload-block{
+<style lang="scss" scoped rel="stylesheet/scss">
+    .demo-upload-block {
         display: inline-block;
         width: 90px;
         height: 90px;
         line-height: 90px;
     }
-    .demo-upload-list{
+
+    .demo-upload-list {
         text-align: center;
         line-height: 90px;
         border: 1px solid transparent;
@@ -131,14 +165,16 @@
         overflow: hidden;
         background: #fff;
         position: relative;
-        box-shadow: 0 1px 1px rgba(0,0,0,.2);
+        box-shadow: 0 1px 1px rgba(0, 0, 0, .2);
         margin-right: 4px;
     }
-    .demo-upload-list img{
+
+    .demo-upload-list img {
         width: 100%;
         height: 100%;
     }
-    .demo-upload-list-cover{
+
+    .demo-upload-list-cover {
         display: block;
         position: absolute;
         top: 0;
@@ -147,14 +183,16 @@
         height: 14px;
         padding: 2px;
         border-radius: 50%;
-        background-color: rgba(255,0,0,.8);
+        background-color: rgba(255, 0, 0, .8);
         opacity: .4;
         line-height: 12px;
     }
-    .demo-upload-list:hover .demo-upload-list-cover{
-        opacity:1;
+
+    .demo-upload-list:hover .demo-upload-list-cover {
+        opacity: 1;
     }
-    .demo-upload-list-cover i{
+
+    .demo-upload-list-cover i {
         color: #fff;
         font-size: 14px;
         cursor: pointer;
