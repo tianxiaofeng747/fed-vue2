@@ -21,7 +21,6 @@ let User = {
             });
         });
 
-
     },
     logout (data) {
         return new Promise(function (resolve, reject) {

@@ -4,7 +4,7 @@ import iView from 'iview';
 import User from './User';
 //import loading from '@components/loading'
 
-const Interceptor = {
+class Interceptor {
 	// 对请求数据做些什么
 	request() {
 		if (!String.prototype.trim) {
@@ -12,11 +12,11 @@ const Interceptor = {
 				return this.replace(/^\s+|\s+$/g, '');
 			};
 		}
-        function getClass(object){
+        let getClass = (object)=>{
             return Object.prototype.toString.call(object).match(/^\[object\s(.*)\]$/)[1];
         };
 		let clearNoneValueObj = (obj) => {
-			for (var i in obj) {
+			for (let i in obj) {
 				if (getClass(obj[i]) == 'Object') {
 					clearNoneValueObj(obj[i]);
 				} else {
@@ -41,11 +41,11 @@ const Interceptor = {
 		};
 		axios.interceptors.request.use(function (request) {
 			iView.LoadingBar.start();
-
+			//本地
 			if (CONFIG.DEV_MODE == 0) {
 				request.method = 'GET';
 				request.url = '/data/' + request.url + '.json?' + getParams(request.data || {});
-
+			//线上
 			}else if (CONFIG.DEV_MODE == 1 && request.method.toLowerCase()  == 'post') {
 				request.url = '/gateway/'+ (request.url.split('.').length == 1 ? request.url : 'call');
                 request.headers.jtoken = User.msg ? User.msg.token : User.token;
@@ -55,12 +55,11 @@ const Interceptor = {
 		}, function (error) {
 			return Promise.reject(error);
 		})
-	},
+	};
 	// 对响应数据做点什么
 	response() {
 		axios.interceptors.response.use(function (response) {
 			iView.LoadingBar.finish();
-
 			if (response.data) {
 				if (response.data.code == 'SUCCESS' || response.data.code == '0') {
 					return response.data;
@@ -73,7 +72,7 @@ const Interceptor = {
 			// 对响应错误做点什么
 			return Promise.reject(error);
 		})
-	},
+	};
 	init(){
 		this.request();
 		this.response();

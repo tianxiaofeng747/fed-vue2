@@ -1,9 +1,8 @@
 <template>
     <div>
-        <File-upload :file-list.sync="list" max=1></File-upload>
+        <File-upload :file-list.sync="list" max=2></File-upload>
         <button @click="submit">tijiao</button>
     </div>
-
 </template>
 <script type="text/javascript">
     import FileUpload from '@/components/FileUpload';

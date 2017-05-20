@@ -2,10 +2,10 @@
 import swal from 'sweetalert2';
 
 const SweetAlert =  {
-    swal: function () {
+    swal() {
         return swal.apply(swal, arguments);
     },
-    alert: function (title, message, type,opt) {
+    alert(title, message, type,opt) {
         return swal(Object.assign({
             title: title,
             text: message,
@@ -19,7 +19,7 @@ const SweetAlert =  {
             //console.log(e);
         });
     },
-    confirm: function (opt) {
+    confirm(opt) {
         return swal(Object.assign({
             confirmButtonText: '确定',
             width: '300px',
@@ -33,22 +33,22 @@ const SweetAlert =  {
             //console.log(e);
         });
     },
-    success: function (title, message) {
+    success(title, message) {
         return this.alert(title, message, 'success',{
             timer: '1500',
             showConfirmButton: false
         });
     },
-    error: function (title, message) {
+    error(title, message) {
         return this.alert(title, message, 'error');
     },
-    warning: function (title, message) {
+    warning(title, message) {
         return this.alert(title, message, 'warning');
     },
-    info: function (title, message) {
+    info(title, message) {
         return this.alert(title, message, 'info');
     },
-    close: function () {
+    close() {
         return window.alert.close();
     }
 };

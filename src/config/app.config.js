@@ -1,8 +1,8 @@
 const CONFIG = {
     "DEV_MODE": 1,
-    "APP_CODE":"YERP",
+    "APP_CODE": "YERP",
     "SERVER": "/gateway",
-    "AUTH_CLOSE" : true,
+    "AUTH_CLOSE": true,
     "IMAGE_UPLOAD": "/gateway/upload",
     "IMAGE_DOWNLOAD": "http://dfs.test.cloudyigou.com/dfs/",
     "IMG_SIZE_MIN": 1024,

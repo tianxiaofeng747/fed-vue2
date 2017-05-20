@@ -1,7 +1,9 @@
 import axios from 'axios';
 import Interceptor from  './interceptor';
 
-Interceptor.init();
+let interceptor = new Interceptor();
+	interceptor.init();
+
 let Http = {
 	post :  async (url, data = {}, type = 'post') => {
 		let headers = {
