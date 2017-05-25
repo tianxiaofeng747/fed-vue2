@@ -17,8 +17,7 @@
                     </Select>
                 </Form-item>
                 <Form-item>
-                    <Date-picker type="daterange" placement="bottom-end" placeholder="开始时间-结束时间"
-                                 @on-change="dateChangeTime" class="w180" format="yyyy-MM-dd"></Date-picker>
+                    <datepicker $type="daterange" $placeholder="开始时间-结束时间" $width="w180" @changeTime="changeTime"> </datepicker>
                 </Form-item>
                 <Form-item>
                     <Input placeholder="消费方" v-model="from.search_subscriber_appcode" class="w100"></Input>
@@ -35,18 +34,18 @@
             </Form>
             </Col>
             <Col span="24">
-            <Table border :columns="columns" :data="data1" highlight-row="true" style="width:100% !important"></Table>
+            <Table border :columns="columns" :data="data1"  style="width:100% !important"></Table>
             </Col>
             <Col span="24">
-            <Page :total="total" :page-size="pageSize" :current="pageIndex" @on-change="changePage"
-                  @on-page-size-change="changeSize" show-elevator show-sizer show-total></Page>
+                  <pagination :total="total" :pageSize="pageSize" @getList="getList"></pagination>
             </Col>
         </Row>
     </section>
 </template>
 
 <script>
-
+    import pagination from '@/components/pagination'
+    import datepicker from '@/components/dataPicker'
     export default {
         name: 'table',
         data() {
@@ -151,7 +150,7 @@
             }
         },
         methods: {
-            getList: function () {
+            getList: function (pageIndex=this.pageIndex,pageSize=this.pageSize) {
                 var self = this;
                 this.Http.post('serviceoi.auditAPI.queryAuditLog',
                         {
@@ -162,8 +161,8 @@
                                 "subscriber_appcode": this.from.search_subscriber_appcode,
                                 "begin_time": this.startTime,
                                 "end_time": this.endTime,
-                                "pageIndex": this.pageIndex,
-                                "pageSize": this.pageSize
+                                "pageIndex":pageIndex,
+                                "pageSize": pageSize
                             }
                         })
                         .then(function (re) {
@@ -171,7 +170,7 @@
                             self.users = [];
                             re.data.rows.forEach(function (item, index) {
                                 let data = {
-                                    num: index + 1 + (self.pageIndex - 1) * self.pageSize,
+                                    num: index + 1 + (pageIndex - 1) * pageSize,
                                     subscriber_appcode: item.subscriber_appcode,
                                     company_no: item.company_no,
                                     interface_code: item.interface_code,
@@ -184,10 +183,9 @@
                             })
                             self.data1 = self.users;
                             self.total = re.data.total;
-                            self.pageSize = re.data.pageSize;
                         })
             },
-            reset: function () {
+            reset() {
                 this.from.result.value = '1'
                 this.from.type.value = '-1'
                 this.from.search_interface_code = ''
@@ -198,17 +196,10 @@
                 this.endtTime = ''
                 this.getList();
             },
-            dateChangeTime: function (val) {
+            //时间
+            changeTime: function (val) {
                 this.startTime = val[0];
                 this.endTime = val[1];
-            },
-            changeSize: function (size) {
-                this.pageIndex = 1;
-                this.pageSize = size;
-                this.getList();
-            },
-            changePage: function () {
-
             }
 
         },
@@ -216,6 +207,9 @@
             this.getList();
         },
         computed(){
+        },
+        components:{
+            pagination,datepicker
         }
     }
 
