@@ -1,4 +1,4 @@
-import axios from 'axios';
+﻿import axios from 'axios';
 import CONFIG from '../config/app.config';
 import iView from 'iview';
 import User from './User';
@@ -44,7 +44,7 @@ class Interceptor {
 			//本地
 			if (CONFIG.DEV_MODE == 0) {
 				request.method = 'GET';
-				request.url = '/data/' + request.url + '.json?' + getParams(request.data || {});
+				request.url = 'static/data/' + request.url + '.json?' + getParams(request.data || {});
 			//线上
 			}else if (CONFIG.DEV_MODE == 1 && request.method.toLowerCase()  == 'post') {
 				request.url = '/gateway/'+ (request.url.split('.').length == 1 ? request.url : 'call');

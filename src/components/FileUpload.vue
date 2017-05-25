@@ -14,7 +14,8 @@
             </template>
         </div>
         <div class="demo-upload-block">
-            <Upload ref="upload" :show-upload-list="false" :default-file-list="defaultList" :on-success="handleSuccess" :format="['jpg','jpeg','png','pdf']" :max-size="2048"
+            <Upload ref="upload"
+                    :show-upload-list="false" :default-file-list="defaultList" :on-success="handleSuccess" :format="['jpg','jpeg','png','pdf']" :max-size="5120"
                     :on-format-error="handleFormatError" :on-exceeded-size="handleMaxSize" :before-upload="handleBeforeUpload" multiple type="drag" :action="config.IMAGE_UPLOAD">
                 <div>
                     <Icon type="camera" size="20"></Icon>
@@ -121,7 +122,7 @@
             handleMaxSize (file) {
                 this.$Notice.warning({
                     title: '超出文件大小限制',
-                    desc: '文件 ' + file.name + ' 太大，不能超过 2M。'
+                    desc: '文件 ' + file.name + ' 太大，不能超过 5M。'
                 });
             },
             handleBeforeUpload () {
