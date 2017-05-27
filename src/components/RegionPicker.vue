@@ -4,9 +4,7 @@
     </div>
 </template>
 <script type="text/javascript">
-    import RegionPicker from 'vue-region-picker'
-    import REGION_DATA from 'china-area-data'
-    RegionPicker.region = REGION_DATA
+
     export default {
         name:'regionPicker',
         data() {
@@ -17,7 +15,7 @@
             }
         },
         components: {
-            RegionPicker
+
         },
         methods: {
            

@@ -15,6 +15,7 @@ class Interceptor {
         let getClass = (object)=>{
             return Object.prototype.toString.call(object).match(/^\[object\s(.*)\]$/)[1];
         };
+        //清空无值对象
 		let clearNoneValueObj = (obj) => {
 			for (let i in obj) {
 				if (getClass(obj[i]) == 'Object') {
@@ -28,6 +29,7 @@ class Interceptor {
 				}
 			}
 		};
+        //把对象键值转换成数组形式
 		let getParams = (obj) => {
 			var result = [],
 				keys = Object.keys(obj);

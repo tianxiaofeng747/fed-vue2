@@ -27,7 +27,7 @@
                     <Button type="primary" @click="getList">搜索</Button>
                 </Form-item>
                 <Form-item>
-                    <Button @click="reset">重置</Button>
+                    <Button @click="reset">重置 </Button>
                 </Form-item>
             </Form>
             </Col>
@@ -37,6 +37,7 @@
             <Col span="24" class="toolbar">
             <pagination :total="total" :pageSize="pageSize" @getList="getList"></pagination>
             </Col>
+            {{count}}
         </Row>
     </section>
 </template>
@@ -147,6 +148,11 @@ export default {
 
         }
     },
+    computed:{
+        count: function () {
+            return this.$store.state.count;
+        }
+    },
     methods: {
         getList: function (pageIndex = this.pageIndex, pageSize = this.pageSize) {
             var self = this;
@@ -203,8 +209,6 @@ export default {
     },
     mounted() {
         this.getList();
-    },
-    computed() {
     },
     components: {
         pagination, datepicker

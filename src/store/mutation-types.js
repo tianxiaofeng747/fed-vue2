@@ -1,2 +1,2 @@
-export const RECORD_USERINFO = 'RECORD_USERINFO'  //用户登入
+export const CHANGE_NUM = 'CHANGE_NUM'  //用户登入
 

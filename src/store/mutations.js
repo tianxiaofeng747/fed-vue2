@@ -1,11 +1,9 @@
-import {
-    RECORD_USERINFO
-} from './mutation-types.js'
+import {CHANGE_NUM} from './mutation-types.js'
 
 
 export default {
 
-    [RECORD_USERINFO](){
-        
+    [CHANGE_NUM](state,num){
+        state.count += num;
     }
 }

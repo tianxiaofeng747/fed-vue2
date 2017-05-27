@@ -1,4 +1,5 @@
 import Http from '@/services/Http';
+import {RECORD_USERINFO} from '@/store/mutation-types.js';
 const URL = {
     login: 'login',
     currentUser: 'currentUser',
