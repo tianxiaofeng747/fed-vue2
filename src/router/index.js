@@ -1,5 +1,5 @@
 const dashboard = r => require.ensure([], () => r(require('../pages/dashboard/Dashboard')), 'dashboard')
-const table = r => require.ensure([], () => r(require('../pages/Table')), 'table')
+const table = r => require.ensure([], () => r(require('../pages/table/Table')), 'table')
 const File = r => require.ensure([], () => r(require('../pages/imgUpload/File')), 'File')
 import Auth from '../pages/auth/Auth';
 export default [
