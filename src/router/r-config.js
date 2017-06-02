@@ -18,9 +18,7 @@ const router = new VueRouter({
  * router interceptor
  */
 router.beforeEach((to, from, next) => {
-    console.log(1)
-    if(to.path != '/auth'){
-         console.log(state.userInfo)
+    if(to.path != '/auth'&& from.path !='/'){
         if(state.userInfo && state.userInfo.enterpriseNo){
             next();
         }else{
@@ -28,19 +26,9 @@ router.beforeEach((to, from, next) => {
                  path:'/auth'
              }) 
         }
-        // User.currentUser().then(result =>{
-        //     if(!User.msg || !User.msg.enterpriseNo){
-        //         next({
-        //             path:'/auth'
-        //         })
-        //     }else{
-        //         next();
-        //     }
-        // },function () {
-        //     next({
-        //         path:'/auth'
-        //     })
-        // });
+    }else if(from.path=='/'){
+        //用户刷新
+        next();
     }else{
         next();
     }

@@ -51,7 +51,7 @@
                     </template>
                 </li>
             </ul>
-            </aside>
+        </aside>
         <section class="content-container">
             <div class="grid-content bg-purple-light">
                 <Col span="24" class="breadcrumb-container">
@@ -76,13 +76,13 @@
 <script>
 import MENU from '../../config/menu.js';
 import SweetAlert from '../../services/sweetalert';
-import {mapState,mapActions} from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 import User from '../../services/User';
 import CONFIG from '@/config/app.config';
 export default {
     data() {
         return {
-            sysName: '云审计系统',
+            sysName: '云供应链',
             collapsed: false,
             sysUserName: '',
             sysUserAvatar: '',
@@ -100,8 +100,9 @@ export default {
         }
     },
     methods: {
+        ...mapMutations(['REFRESH']),
         ...mapActions({
-            'userLoginout':'logout'
+            'userLoginout': 'logout'
         }),
         onSubmit() {
             console.log('submit!');
@@ -151,9 +152,17 @@ export default {
         User.msg = User.msg || {};
         this.sysUserName = User.msg.enterpriseName;
         this.sysUserAvatar = CONFIG.IMAGE_DOWNLOAD + User.msg.enterpriseLogo;
-        console.log(CONFIG.IMAGE_DOWNLOAD)
-
-    }
+        this.useInfo
+    },
+    //F5刷新重新赋值
+    computed: mapState({
+        useInfo: function (state) {
+            if (!state.userInfo) {
+                this.REFRESH();
+            }
+            return state.userInfo
+        }
+    })
 }
 
 </script>

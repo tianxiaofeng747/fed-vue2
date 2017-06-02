@@ -48,7 +48,7 @@
                 verifyImg: '',
                 errorMsg: '',
                 form: {
-                    username: 'yucxing1',
+                    username: 'scm_dajyb',
                     password: '123456',
                     verifycode: '1243'
                 }

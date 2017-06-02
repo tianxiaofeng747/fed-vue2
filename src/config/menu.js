@@ -1,11 +1,19 @@
 const MENU = [{
     name: "首页",
     icon: "ios-paper",
-    state: "home"
+    son: [
+        {
+            name: '销售趋势',
+            state: 'chart'
+        },
+        {
+            name: '订单趋势',
+            state: 'chart'
+        }
+    ]
 }, {
     name: "企业信息",
     icon: "ios-paper",
-    //state: "supplier",
     son: [
         {
             name: '列表',
