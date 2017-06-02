@@ -36,7 +36,7 @@
 </template>
 <script type="text/javascript">
     import CONFIG from '../../config/app.config';
-    import User from '../../services/User';
+    import {mapState, mapMutations,mapActions} from 'vuex'
     import  CryptoJS from '@/assets/js/aes/aes-min.min.js';
     import SHA256 from  '@/assets/js/sha256/sha256.min.js';
     const URL = {
@@ -54,18 +54,25 @@
                 }
             }
         },
+        computed:{
+            ...mapState(['userInfo']),
+        },
         methods: {
-            refreshCode: function () {
+             ...mapActions({
+                 'userLogin':'login',
+                 'currentUser':'currentUser'
+             }),
+            refreshCode () {
                 let config = CONFIG,
                         self = this,
                         getRandomImg = function () {
                             self.verifyImg = CONFIG.SERVER + URL.VERIFY_CODE + '?t=' +  Math.round(Math.random() * 1000000);
                         };
                 if (config.DEV_MODE == 1) { // 开发,需跨域
-                    if (User.msg && User.msg.token) {
+                    if (this.userInfo && this.userInfo.token) {
                         getRandomImg();
                     } else {
-                        User.currentUser().then(function () {
+                        self.currentUser().then(function () {
                             getRandomImg();
                         },function () {
                             getRandomImg();
@@ -75,13 +82,13 @@
                     getRandomImg();
                 }
             },
-            login: function () {
-                var xflag = false,
+            login () {
+                    let xflag = false,
                         self = this,
-                        clientid = User.msg ? User.msg.clientId : null,
+                        clientid = this.userInfo ? this.userInfo.clientId : null,
                         _sendData = CryptoJS.enc.Utf8.parse(SHA256(self.form.password)),
                         _encrypted = CryptoJS.AES.encrypt(_sendData, CryptoJS.enc.Utf8.parse(clientid), {
-                            iv: CryptoJS.enc.Utf8.parse(User.msg.token),
+                            iv: CryptoJS.enc.Utf8.parse(this.userInfo.token),
                             mode: CryptoJS.mode.CBC,
                             padding: CryptoJS.pad.Iso10126
                         }),
@@ -107,16 +114,18 @@
                     password: CryptoJS.enc.Base64.stringify(_encrypted.ciphertext)
                 });
                 if (!xflag) {
-                    User.login(param).then(function () {
+                    this.userLogin(param).then(function (msg) {
                         self.$router.push({name:'table'});
                     }, function (err) {
+                        //记录错误信息
+                        self.errorMsg=err.message;
                         self.refreshCode();
                     });
                 }
             }
         },
         mounted() {
-            this.refreshCode();
+           this.refreshCode();
         }
     }
 </script>

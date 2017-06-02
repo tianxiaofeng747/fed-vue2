@@ -1,6 +1,6 @@
 <template>
     <div>
-        <region-picker :province="province" :city="city" :district="district"></region-picker>
+        <region-picker :province="province" @onchange="change" :city="city" :district="district"></region-picker>
     </div>
 </template>
 <script type="text/javascript">

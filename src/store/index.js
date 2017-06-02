@@ -6,10 +6,9 @@ import getters from './getter'
 
 Vue.use(Vuex);
 const state = {
-    count:1,
-	User:{
 
-    }
+    count:1,
+	userInfo:null
 };
 
 export default new Vuex.Store({

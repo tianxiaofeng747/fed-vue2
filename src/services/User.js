@@ -8,15 +8,20 @@ const URL = {
 let User = {
     login (data) {
         return new Promise(function (resolve, reject) {
-            Http.post(URL.login, data || {}).then(result => {
+            Http.post(URL.login, data).then(result => {
                 User.msg = result.data || {};
                 sessionStorage.setItem('user', JSON.stringify(User.msg));
-                resolve(User.msg);
-                if (User.msg.id) {
-                    resolve(result);
-                } else {
-                    reject(result);
+                if(User.msg.data){
+                     resolve(User.msg);
+                }else {
+                    reject(User.msg);
                 }
+                           // resolve(User.msg);
+                // if (User.msg.id) {
+                //     resolve(result);
+                // } else {
+                //     reject(result);
+                // }
             }, err => {
                 reject(err);
             });
@@ -25,7 +30,7 @@ let User = {
     },
     logout (data) {
         return new Promise(function (resolve, reject) {
-            Http.post(URL.logout, data || {}).then(result => {
+            Http.post(URL.logout, data).then(result => {
                 delete User.msg;
                 sessionStorage.clear();
                 resolve(result);

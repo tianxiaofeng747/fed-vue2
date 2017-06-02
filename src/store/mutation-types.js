@@ -1,2 +1,3 @@
-export const CHANGE_NUM = 'CHANGE_NUM'  //用户登入
+export const CHANGEUSER = 'CHANGEUSER'  //用户登入
+
 

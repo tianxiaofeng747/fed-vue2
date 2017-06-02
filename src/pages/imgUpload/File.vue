@@ -11,10 +11,6 @@
 </template>
 <script type="text/javascript">
     import FileUpload from '@/components/FileUpload';
-    import regionPicker from '@/components/RegionPicker';
-    import { mapMutations } from 'vuex';
-
-    import {CHANGE_NUM} from '@/store/mutation-types.js';
     export default{
         data(){
             return {
@@ -32,8 +28,7 @@
             }
         },
         components:{
-            FileUpload,
-            regionPicker
+            FileUpload
         },
         methods:{
             ...mapMutations([
