@@ -4,7 +4,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router'
 import routes from './index.js'
-import User from  '@/services/User';
+import {state} from '@/store/index'
 /**
  * router
  */
@@ -18,20 +18,29 @@ const router = new VueRouter({
  * router interceptor
  */
 router.beforeEach((to, from, next) => {
+    console.log(1)
     if(to.path != '/auth'){
-        User.currentUser().then(result =>{
-            if(!User.msg || !User.msg.enterpriseNo){
-                next({
-                    path:'/auth'
-                })
-            }else{
-                next();
-            }
-        },function () {
+         console.log(state.userInfo)
+        if(state.userInfo && state.userInfo.enterpriseNo){
+            next();
+        }else{
             next({
-                path:'/auth'
-            })
-        });
+                 path:'/auth'
+             }) 
+        }
+        // User.currentUser().then(result =>{
+        //     if(!User.msg || !User.msg.enterpriseNo){
+        //         next({
+        //             path:'/auth'
+        //         })
+        //     }else{
+        //         next();
+        //     }
+        // },function () {
+        //     next({
+        //         path:'/auth'
+        //     })
+        // });
     }else{
         next();
     }

@@ -15,7 +15,7 @@ export default {
             });
         });
     },
-    logout(context, obj) {
+    logout(context, data) {
         return new Promise(function (resolve, reject) {
             Http.post('currentUser', data).then(result => {
                 context.commit('CHANGEUSER', null);

@@ -5,10 +5,8 @@ import actions from './action'
 import getters from './getter'
 
 Vue.use(Vuex);
-const state = {
-
-    count:1,
-	userInfo:null
+export const state = {
+	userInfo:null //用户信息
 };
 
 export default new Vuex.Store({

@@ -2,11 +2,6 @@
     <div>
         <File-upload :file-list.sync="list" max=2></File-upload>
         <button @click="submit">tijiao</button>
-        <div>
-            <p>{{count}}</p>
-            <input type="number" v-model="step"/>
-            <Button type="primary" @click="add">+</Button>
-        </div>
     </div>
 </template>
 <script type="text/javascript">
@@ -31,14 +26,6 @@
             FileUpload
         },
         methods:{
-            ...mapMutations([
-                CHANGE_NUM
-            ]),
-            add(){
-                if(this.step>0){
-                    this.CHANGE_NUM(Number(this.step));
-                }
-            },
             submit(){
                 console.log(this.list);
             }

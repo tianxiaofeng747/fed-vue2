@@ -51,21 +51,6 @@
                     </template>
                 </li>
             </ul>
-            <!--<ul class="ivu-menu ivu-menu-dark ivu-menu-vertical" style="width: 60px;">
-            					<li  class="ivu-menu-submenu" v-for="(item,index) in menuList" :class="item.son?'ivu-menu-item-active ivu-menu-opened':''">
-            						<template v-if="item.son">
-            								<div class="ivu-menu-submenu-title" style="padding-left: 20px;" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)"><Icon :type="item.icon"></Icon></div>
-            								<ul class="ivu-menu" :class="'submenu-hook-'+index" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)">
-            									<li  v-for="child in item.son"  v-if="!child.hidden" :key="child.state"   style="padding-left: 40px;" class="sonlist ivu-menu-item" :class="$route.path==child.state?'is-active':''" @click="$router.push(child.state)">{{child.name}}
-            									</li>
-            								</ul>
-            						</template>
-            						<template v-else>
-            							<div class="ivu-menu-submenu-title" style="padding-left: 20px;height: 56px;line-height: 56px;padding: 0 20px;"  :class="$route.path==item.state?'is-active':''" @click="$router.push(item.state)"><Icon :type="item.icon"></Icon></div>
-            						</template>
-            					</li>
-            				</ul>
-            				-->
             </aside>
         <section class="content-container">
             <div class="grid-content bg-purple-light">
@@ -91,6 +76,7 @@
 <script>
 import MENU from '../../config/menu.js';
 import SweetAlert from '../../services/sweetalert';
+import {mapState,mapActions} from 'vuex'
 import User from '../../services/User';
 import CONFIG from '@/config/app.config';
 export default {
@@ -114,6 +100,9 @@ export default {
         }
     },
     methods: {
+        ...mapActions({
+            'userLoginout':'logout'
+        }),
         onSubmit() {
             console.log('submit!');
         },
@@ -137,7 +126,7 @@ export default {
                 showLoaderOnConfirm: true,
                 allowOutsideClick: false,
                 preConfirm: function () {
-                    return User.logout();
+                    return self.userLoginout();
                 }
             }).then(result => {
                 if (result.code == 'SUCCESS') {
