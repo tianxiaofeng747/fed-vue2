@@ -50,7 +50,6 @@ class Interceptor {
 			//线上
 			}else if (CONFIG.DEV_MODE == 1 && request.method.toLowerCase()  == 'post') {
 				request.url = '/gateway/'+ (request.url.split('.').length == 1 ? request.url : 'call');
-                request.headers.jtoken = User.msg ? User.msg.token : User.token;
 			}
 			clearNoneValueObj(request);
 			return request;

@@ -29,7 +29,7 @@ module.exports = {
         assetsPublicPath: '/',
         proxyTable: {
             '/gateway': {
-                target: 'http://172.30.43.243',
+                target: 'http://scms.dev.cloudyigou.com',
                 changeOrigin: true,
                 logLevel:'debug',
                 pathRewrite: {

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Interceptor from  './interceptor';
-
+import {state} from '@/store/index'
 let interceptor = new Interceptor();
 	interceptor.init();
 
@@ -10,10 +10,10 @@ let Http = {
 			'X-Requested-With': 'XMLHttpRequest',
 			'Content-Type': 'application/json',
 			'apiName': url
-		},token = window.sessionStorage.getItem('token');
+		},token = state.userInfo?state.userInfo.token:'';
 
 		if (token) {
-			headers.jtoken = token;
+			headers=Object.assign(headers,{'jtoken':token})
 		}
 		let config = {
 			url: url,

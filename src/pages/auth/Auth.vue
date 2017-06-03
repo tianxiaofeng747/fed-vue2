@@ -115,6 +115,7 @@
                 });
                 if (!xflag) {
                     this.userLogin(param).then(function (msg) {
+                        console.log('111')
                         self.$router.push({name:'table'});
                     }, function (err) {
                         //记录错误信息

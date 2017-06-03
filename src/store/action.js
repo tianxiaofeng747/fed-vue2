@@ -3,7 +3,7 @@ export default {
     login(context, data) {
         return new Promise(function (resolve, reject) {
             Http.post('login', data).then(result => {
-                let userinfo = result.data || {};
+                let userinfo = result || {};
                 if (userinfo.data) {
                     context.commit('CHANGEUSER', userinfo.data);
                     resolve(userinfo);

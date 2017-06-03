@@ -6,7 +6,7 @@ import getters from './getter'
 
 Vue.use(Vuex);
 export const state = {
-	userInfo:null //用户信息
+	userInfo:null, //用户信息
 };
 
 export default new Vuex.Store({
