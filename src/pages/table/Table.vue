@@ -17,11 +17,12 @@
                 </Form-item>
                 <Form-item>
                     <Button @click="reset">重置</Button>
+                    <Button @click="changeWidth">改变</Button>
                 </Form-item>
             </Form>
             </Col>
             <Col span="24">
-            <Table border :columns="columns" :data="tableDate" style="width:100%"></Table>
+            <Table border :columns="columns" :data="tableDate" :width="innerWidth"></Table>
             </Col>
             <Col span="24" class="toolbar">
             <pagination :total="total" :pageSize="pageSize" @getList="getList"></pagination>
@@ -36,12 +37,14 @@
 </template>
 
 <script>
-    import pagination from '@/components/pagination'
-    import dailog from '@/components/Dailog'
+    import pagination from '@/components/pagination';
+    import dailog from '@/components/Dailog';
+    import { mapState} from 'vuex'
     export default {
         name: 'table',
         data () {
             return {
+                innerWidth:null,
                 modal1: false,
                 users: [],
                 total: 0,
@@ -143,7 +146,9 @@
 
             }
         },
-        computed: {},
+        computed: {
+            ...mapState(['bodyWidth']),
+        },
         methods: {
             getList: function ({pageIndex = this.pageIndex, pageSize = this.pageSize}) {
                 let self = this
@@ -187,10 +192,15 @@
                 this.from.result.value = -1
                 this.getList({pageIndex: '1'})
             }
-
+        },
+        watch:{
+            bodyWidth(){
+                this.innerWidth = this.bodyWidth;
+                console.log(this.innerWidth);
+            }
         },
         mounted () {
-            this.getList({})
+            this.getList({});
         },
         components: {
             pagination,

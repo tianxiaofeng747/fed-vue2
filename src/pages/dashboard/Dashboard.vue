@@ -83,7 +83,7 @@ export default {
     data() {
         return {
             sysName: '云供应链',
-            collapsed: false,
+            collapsed: true,
             sysUserName: '',
             sysUserAvatar: '',
             menuList: MENU,
@@ -100,7 +100,7 @@ export default {
         }
     },
     methods: {
-        ...mapMutations(['REFRESH']),
+        ...mapMutations(['REFRESH','CHANGEWIDTH']),
         ...mapActions({
             'userLoginout': 'logout'
         }),
@@ -141,8 +141,20 @@ export default {
         },
         //折叠导航
         collapse: function () {
-            this.collapsed = !this.collapsed;
-            window.resize()
+            let bodyWidth = null;
+            if(this.collapsed = !this.collapsed){
+                bodyWidth = document.body.offsetWidth - 110;
+            }else{
+                bodyWidth = document.body.offsetWidth - 280;
+            }
+            this.CHANGEWIDTH(bodyWidth);
+            if( document.createEvent) {
+                var event = document.createEvent ("HTMLEvents");
+                event.initEvent("resize", true, true);
+                window.dispatchEvent(event);
+            } else if(document.createEventObject){
+                window.fireEvent("onresize");
+            }
         },
         showMenu(i, status) {
             this.$refs.menuCollapsed.getElementsByClassName('submenu-hook-' + i)[0].style.display = status ? 'block' : 'none';
@@ -152,11 +164,10 @@ export default {
         let User = this.useInfo;
         this.sysUserName = User.enterpriseName;
         this.sysUserAvatar = CONFIG.IMAGE_DOWNLOAD + User.enterpriseLogo;
-
+        this.collapse();
     },
 
     //F5刷新重新赋值
-
     computed: mapState({
         useInfo: function (state) {
             if (!state.userInfo) {
