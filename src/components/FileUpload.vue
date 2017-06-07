@@ -14,9 +14,9 @@
             </template>
         </div>
         <div class="demo-upload-block">
-            <Upload ref="upload"
-                    :show-upload-list="false" :default-file-list="defaultList" :on-success="handleSuccess" :format="['jpg','jpeg','png','pdf']" :max-size="5120"
-                    :on-format-error="handleFormatError" :on-exceeded-size="handleMaxSize" :before-upload="handleBeforeUpload" multiple type="drag" :action="config.IMAGE_UPLOAD">
+            <Upload ref="upload" :show-upload-list="false" :default-file-list="defaultList" :on-success="handleSuccess" :format="['jpg','jpeg','png','pdf']" :max-size="5120"
+                    :on-format-error="handleFormatError" :on-exceeded-size="handleMaxSize" :headers="headers"  :before-upload="handleBeforeUpload" multiple type="drag"
+                    :action="config.IMAGE_UPLOAD">
                 <div>
                     <Icon type="camera" size="20"></Icon>
                 </div>
@@ -29,11 +29,15 @@
     import '../directive/vueDirective.js';
     import Utils from '@/services/Utils';
     var pdf = require('@/assets/images/pdf.png')
-    var noimage = require('@/assets/images/noimage.png')
+    var noimage = require('@/assets/images/noimage.png');
+    import {state} from '@/store/index';
     export default {
         name: 'FileUpload',
         data (){
             return {
+                headers: {
+                    jtoken: state.userInfo ? state.userInfo.token : ''
+                },
                 defaultList: [],
                 imgName: '',
                 maxLength: 5,

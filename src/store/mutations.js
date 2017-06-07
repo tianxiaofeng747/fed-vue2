@@ -1,5 +1,4 @@
-import { CHANGEUSER,REFRESH } from './mutation-types.js'
-
+import {CHANGEUSER, REFRESH} from './mutation-types.js'
 
 export default {
     //用户登入
@@ -9,8 +8,8 @@ export default {
     },
     //用户刷新,重新赋值
     [REFRESH](state, data){
-        let user=JSON.parse(sessionStorage.getItem('user'));
-        state.userInfo = user||null;
+        let user = JSON.parse(sessionStorage.getItem('user'));
+        state.userInfo = user || null;
     }
-  
+
 }

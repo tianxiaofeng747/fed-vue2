@@ -148,13 +148,15 @@ export default {
             this.$refs.menuCollapsed.getElementsByClassName('submenu-hook-' + i)[0].style.display = status ? 'block' : 'none';
         }
     },
-    mounted() {
-        User.msg = User.msg || {};
-        this.sysUserName = User.msg.enterpriseName;
-        this.sysUserAvatar = CONFIG.IMAGE_DOWNLOAD + User.msg.enterpriseLogo;
-        this.useInfo
+    created(){
+        let User = this.useInfo;
+        this.sysUserName = User.enterpriseName;
+        this.sysUserAvatar = CONFIG.IMAGE_DOWNLOAD + User.enterpriseLogo;
+
     },
+    
     //F5刷新重新赋值
+
     computed: mapState({
         useInfo: function (state) {
             if (!state.userInfo) {

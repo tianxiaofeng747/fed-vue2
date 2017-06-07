@@ -21,7 +21,7 @@
             </Form>
             </Col>
             <Col span="24">
-            <Table border :columns="columns" :data="tableDate" :size="small" :height="250" style="width:100%"></Table>
+            <Table border :columns="columns" :data="tableDate"  style="width:100%"></Table>
             </Col>
             <Col span="24" class="toolbar">
             <pagination :total="total" :pageSize="pageSize" @getList="getList"></pagination>
@@ -133,30 +133,7 @@ export default {
           title: '操作',
           key: 'oper',
           width: 110,
-          render: (h, params) => {
-            let s = [h('Button', {
-              props: {
-                type: 'primary',
-                size: 'small'
-              },
-              style: {
-                marginRight: '5px'
-              },
-              on: {
-                click: () => {
-                  this.open()
-                }
-              }
-            }, '查看'),
-              h('Button', {
-                props: {
-                  type: 'text',
-                  size: 'small'
-                }
-              }, '编辑')]
 
-            return h('div', s)
-          }
 
         }],
       tableDate: []
