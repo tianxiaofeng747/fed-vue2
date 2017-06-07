@@ -154,7 +154,7 @@ export default {
         this.sysUserAvatar = CONFIG.IMAGE_DOWNLOAD + User.enterpriseLogo;
 
     },
-    
+
     //F5刷新重新赋值
 
     computed: mapState({
