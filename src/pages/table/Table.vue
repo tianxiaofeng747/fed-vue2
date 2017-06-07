@@ -4,27 +4,16 @@
         <Row>
             <Col span="24" class="toolbar">
             <Form inline>
-                <Form-item label="处理结果 : " :label-width="70">
+                <Form-item label="状态 : " :label-width="70">
                     <Select v-model="from.result.value" placeholder="请选择" class="w100 ">
                         <Option v-for="item in from.result.options" :label="item.label" :value="item.value" :key="item.value"></Option>
                     </Select>
                 </Form-item>
                 <Form-item>
-                    <Select v-model="from.type.value" placeholder="请选择" class="w180">
-                        <Option v-for="item in from.type.options" :label="item.label" :value="item.value" :key="item.value"></Option>
-                    </Select>
+                    <Input placeholder="客户名称" v-model="from.keywords" class="w300"></Input>
                 </Form-item>
                 <Form-item>
-                    <datepicker $type="daterange" $placeholder="开始时间-结束时间" $width="w180" @changeTime="changeTime"> </datepicker>
-                </Form-item>
-                <Form-item>
-                    <Input placeholder="消费方" v-model="from.search_subscriber_appcode" class="w100"></Input>
-                </Form-item>
-                <Form-item>
-                    <Input placeholder="接口编码/接口名称/请求参数/返回结果" v-model="from.search_interface_code"></Input>
-                </Form-item>
-                <Form-item>
-                    <Button type="primary" @click="getList">搜索</Button>
+                    <Button type="primary" @click="getList({pageIndex:1})">查询</Button>
                 </Form-item>
                 <Form-item>
                     <Button @click="reset">重置 </Button>
@@ -32,249 +21,232 @@
             </Form>
             </Col>
             <Col span="24">
-            <Table border :columns="columns" :data="data1" style="width:100% !important"></Table>
+            <Table border :columns="columns" :data="tableDate" :size="small" :height="250" style="width:100%"></Table>
             </Col>
             <Col span="24" class="toolbar">
             <pagination :total="total" :pageSize="pageSize" @getList="getList"></pagination>
             </Col>
-            {{count}}
+            <Col span="24">
+                <dailog $width="500" $title="添加" :$modal.sync="modal1">
+
+                </dailog>
+            </Col>
         </Row>
     </section>
 </template>
 
 <script>
 import pagination from '@/components/pagination'
-import datepicker from '@/components/dataPicker'
+import dailog from '@/components/Dailog'
 export default {
-    name: 'table',
-    data() {
-        return {
-            users: [],
-            total: 0,
-            pageSize: 20,
-            pageIndex: 1,
-            listLoading: false,
-            addLoading: false,
-            from: {
-                result: {
-                    options: [{
-                        value: '1',
-                        label: '成功'
-                    }, {
-                        value: '2',
-                        label: '失败'
-                    }],
-                    value: '1'
-                },
-                type: {
-                    options: [{
-                        value: '-1',
-                        label: '事件类型'
-                    }, {
-                        value: '供应链增量数据拉取-保存',
-                        label: '供应链增量数据拉取-保存'
-                    }, {
-                        value: 'ERP增量数据拉取-保存',
-                        label: 'ERP增量数据拉取-保存'
-                    }, {
-                        value: '全量数据拉取-保存',
-                        label: '全量数据拉取-保存'
-                    }, {
-                        value: '批量数据拉取',
-                        label: '批量数据拉取'
-                    }, {
-                        value: '批量数据上传',
-                        label: '批量数据上传'
-                    }, {
-                        value: '批量数据上传(发布)',
-                        label: '批量数据上传(发布)'
-                    }, {
-                        value: '批量数据上传(消费)',
-                        label: '批量数据上传(消费)'
-                    }, {
-                        value: '业务状态回写',
-                        label: '业务状态回写'
-                    }, {
-                        value: '消息分发(发布)',
-                        label: '消息分发(发布)'
-                    }, {
-                        value: '消息分发(消费)',
-                        label: '消息分发(消费)'
-                    }],
-                    value: '-1'
-                },
-                date: {
-                    startTime: '',
-                    endTime: ''
-                },
-                search_interface_code: '',
-                search_subscriber_appcode: ''
-            },
-            startTime: '',
-            endTime: '',
-            columns: [{
-                title: '序号',
-                key: 'num',
-                width: 80,
-                align: 'center'
-            },
-            {
-                title: '消费方',
-                key: 'subscriber_appcode'
-            },
-            {
-                title: '企业编号',
-                key: 'company_no'
-            }, {
-                title: '接口编码',
-                key: 'interface_code'
-            }, {
-                title: '接口名称',
-                key: 'interface_name'
-            }, {
-                title: '调用时间',
-                key: 'create_time'
-            }, {
-                title: '处理结果',
-                key: 'result'
-            }, {
-                title: '耗时(ms)',
-                key: 'interval_time'
-            }, {
-                title: '操作',
-                key: 'operate'
-            }],
-            data1: []
-
-        }
-    },
-    computed:{
-        count: function () {
-            return this.$store.state.count;
-        }
-    },
-    methods: {
-        getList: function (pageIndex = this.pageIndex, pageSize = this.pageSize) {
-            var self = this;
-            this.Http.post('serviceoi.auditAPI.queryAuditLog',
-                {
-                    "auditLog": {
-                        "interface_code": this.from.search_interface_code,
-                        "result": this.from.result.value,
-                        "event_type": this.from.type.value,
-                        "subscriber_appcode": this.from.search_subscriber_appcode,
-                        "begin_time": this.startTime,
-                        "end_time": this.endTime,
-                        "pageIndex": pageIndex,
-                        "pageSize": pageSize
-                    }
-                })
-                .then(function (re) {
-                    self.data1 = [];
-                    self.users = [];
-                    re.data.rows.forEach(function (item, index) {
-                        let data = {
-                            num: index + 1 + (pageIndex - 1) * pageSize,
-                            subscriber_appcode: item.subscriber_appcode,
-                            company_no: item.company_no,
-                            interface_code: item.interface_code,
-                            create_time: item.create_time,
-                            result: item.result,
-                            interval_time: item.interval_time,
-                            operate: '<a>12312<a>'
-                        }
-                        self.users.push(data);
-                    })
-                    self.data1 = self.users;
-                    self.total = re.data.total;
-                })
+  name: 'table',
+  data () {
+    return {
+      modal1: false,
+      users: [],
+      total: 0,
+      pageSize: 20,
+      pageIndex: 1,
+      from: {
+        result: {
+          options: [{
+            value: -1,
+            label: '全部'
+          },
+          {
+            value: 3,
+            label: '待审核'
+          },
+          {
+            value: 1,
+            label: '已通过'
+          },
+          {
+            value: 4,
+            label: '被拒绝'
+          },
+          {
+            value: 6,
+            label: '被解除'
+          }],
+          value: -1
         },
-        reset() {
-            this.from.result.value = '1'
-            this.from.type.value = '-1'
-            this.from.search_interface_code = ''
-            this.from.search_subscriber_appcode = ''
-            this.from.date.startTime = ''
-            this.from.date.endTime = ''
-            this.startTime = ''
-            this.endtTime = ''
-            this.getList();
+        keywords: ''
+      },
+      columns: [
+        {
+          title: '客户名称',
+          key: 'customerName',
+          width: 250
         },
-        //时间
-        changeTime: function (val) {
-            this.startTime = val[0];
-            this.endTime = val[1];
-        }
+        {
+          title: '注册证',
+          key: 'registNum',
+          align: 'center',
+          width: 110
+        },
+        {
+          title: '生产厂家',
+          key: 'factoryNum',
+          align: 'center',
+          width: 110
+        },
+        {
+          title: '授权书',
+          key: 'authorizeNum',
+          align: 'center',
+          width: 110
+        },
+        {
+          title: '承诺书',
+          key: 'commitNum',
+          align: 'center',
+          width: 110
+        },
+        {
+          title: '业务员',
+          key: 'entrustNum',
+          align: 'center',
+          width: 110
+        },
+        {
+          title: '产品数量',
+          key: 'productNum',
+          align: 'center',
+          sortable: true,
+          width: 110
+        },
+        {
+          title: '添加时间',
+          key: 'applyTime',
+          align: 'center',
+          sortable: true,
+          width: 110
+        },
+        {
+          title: '状态',
+          key: 'status',
+          align: 'center',
+          width: 110
+        },
+        {
+          title: '操作',
+          key: 'oper',
+          width: 110,
+          render: (h, params) => {
+            let s = [h('Button', {
+              props: {
+                type: 'primary',
+                size: 'small'
+              },
+              style: {
+                marginRight: '5px'
+              },
+              on: {
+                click: () => {
+                  this.open()
+                }
+              }
+            }, '查看'),
+              h('Button', {
+                props: {
+                  type: 'text',
+                  size: 'small'
+                }
+              }, '编辑')]
 
-    },
-    mounted() {
-        this.getList();
-    },
-    components: {
-        pagination, datepicker
+            return h('div', s)
+          }
+
+        }],
+      tableDate: []
+
     }
+  },
+  computed: {
+  },
+  methods: {
+    getList: function ({ pageIndex = this.pageIndex, pageSize = this.pageSize }) {
+      let self = this
+      this.Http.post('scm.supplier.queryCustomers',
+        {
+          'params': {
+            'keywords': this.from.keywords,
+            'orderBy': 'desc',
+            'orderField': 'apply_time',
+            'status': this.from.result.value,
+            'pageIndex': pageIndex,
+            'pageSize': pageSize
+          }
+        }).then(function (re) {
+          console.log(re)
+          self.pageIndex = re.data.pageIndex
+          console.log(self.pageIndex)
+          self.pageSize = re.data.pageSize
+          self.total = re.data.total
+          self.tableDate = re.data.rows
+          .map((item, index) => {
+            let s = `<ul class="customerName_content">
+                      <li>
+                        <img src="http://dfs.test.cloudyigou.com/dfs/s2/M00/25/39/rB4r9Vk3mwWAdctcAAFf5pjzdHU212_100x100.jpg" class="img_logo"/>
+                      </li>
+                      <li>
+                        <p class="ellipsis">${item.customerName}</p>
+                        <p><i class="iconfont icon-dianhua1"></i>${item.linkman}/${item.phone}</p>
+                      </li>
+                    </ul>`
+            return {
+              customerName: s
+            }
+          })
+        })
+    },
+    open () {
+      this.modal1 = true
+    },
+    reset () {
+      this.pageIndex = 1
+      this.from.keywords = ''
+      this.from.result.value = -1
+      this.getList({ pageIndex: '1' })
+    }
+
+  },
+  mounted () {
+    this.getList({})
+  },
+  components: {
+    pagination,
+    dailog
+  }
 }
 
 </script>
 
-<style scoped lang="scss">
-.toolbar {
-    background: #f2f2f2;
-    padding: 10px;
-    margin: 10px 0px;
-    .ivu-form-item {
-        margin-bottom: 0;
+<style  lang="scss">
+
+.img_logo{
+  width:60px;
+  height:60px;
+  border-radius: 50% ;
+  box-shadow: 0px 0px 2px #ccc ;
+  display: block
+}
+.customerName_content{
+  li{
+    &:nth-of-type(1){
+      float:left;
+      margin-right: 5px;
     }
+    &:nth-of-type(2){
+        position: relative;
+        top: 5px;
+    }
+  }
 }
-
-.w100 {
-    width: 100px !important;
-}
-
-.w120 {
-    width: 120px !important;
-}
-
-.w140 {
-    width: 140px !important;
-}
-
-.w160 {
-    width: 160px !important;
-}
-
-.w180 {
-    width: 180px !important;
-}
-
-.w200 {
-    width: 200px !important;
-}
-
-.w220 {
-    width: 220px !important;
-}
-
-.w240 {
-    width: 240px !important;
-}
-
-.w260 {
-    width: 260px !important;
-}
-
-.w280 {
-    width: 280px !important;
-}
-
-.inline {
-    display: inline-block;
-}
-
 .ivu-form-inline {
-
-    .ivu-form-item {
-        margin-right: 0px !important;
-    }
+  .ivu-form-item {
+    margin-right: 0px !important;
+  }
 }
 </style>

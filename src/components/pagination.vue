@@ -15,11 +15,11 @@
         props:['total','pageSize'],
         methods:{
             changePage(page){
-                this.$emit('getList',page,this.size)
+                this.$emit('getList', { pageIndex: page, pageSize: this.size })
             },
             changeSize(size){
                 this.size=size;
-                this.$emit('getList','1',size)
+                this.$emit('getList', { pageIndex: '1', pageSize: size })
             }
         }
     }
