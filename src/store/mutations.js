@@ -10,8 +10,6 @@ export default {
     [REFRESH](state, data){
         let user = JSON.parse(sessionStorage.getItem('user'));
         state.userInfo = user || null;
-    },
-    [CHANGEWIDTH](state, data){
-        state.bodyWidth = data;
     }
+   
 }

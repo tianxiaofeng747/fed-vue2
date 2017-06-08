@@ -141,13 +141,7 @@ export default {
         },
         //折叠导航
         collapse: function () {
-            let bodyWidth = null;
-            if(this.collapsed = !this.collapsed){
-                bodyWidth = document.body.offsetWidth - 110;
-            }else{
-                bodyWidth = document.body.offsetWidth - 280;
-            }
-            this.CHANGEWIDTH(bodyWidth);
+            this.collapsed = !this.collapsed
             if( document.createEvent) {
                 var event = document.createEvent ("HTMLEvents");
                 event.initEvent("resize", true, true);
