@@ -7,12 +7,13 @@
 </template>
 
 <script>
+    import '@/assets/js/limonte-sweetalert2/5.3.5/sweetalert2.scss';
     export default {
         name: 'app'
     }
 </script>
 
-<style lang="scss">
+<style lang="scss" rel="stylesheet/scss">
     #app {
         font-family: 'Avenir', Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;

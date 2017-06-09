@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import store from './store/index.js' //vuex store
 import {router} from './router/r-config.js' //router配置
-import iView from '@/services/iview-config.js'
+import iView from '@/services/iview-config.js';
 import App from './App';
 import Http from  './services/Http';
 

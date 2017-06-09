@@ -101,9 +101,7 @@ export default {
     },
     methods: {
         ...mapMutations(['REFRESH','CHANGEWIDTH']),
-        ...mapActions({
-            'userLoginout': 'logout'
-        }),
+        /*...mapActions({enterpriseName}),*/
         onSubmit() {
             console.log('submit!');
         },
@@ -156,9 +154,11 @@ export default {
     },
     created(){
         let User = this.useInfo;
-        this.sysUserName = User.enterpriseName;
-        this.sysUserAvatar = CONFIG.IMAGE_DOWNLOAD + User.enterpriseLogo;
-        this.collapse();
+        if(User){
+            this.sysUserName = User.enterpriseName;
+            this.sysUserAvatar = CONFIG.IMAGE_DOWNLOAD + User.enterpriseLogo;
+            this.collapse();
+        }
     },
 
     //F5刷新重新赋值
