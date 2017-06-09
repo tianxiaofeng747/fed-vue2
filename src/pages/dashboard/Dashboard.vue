@@ -1,5 +1,5 @@
 <template>
-    <Row class="container">
+    <Row class="my-container">
         <Col span="24" class="header">
         <Col span="10" class="logo" :class="collapsed?'logo-collapse-width':'logo-width'">
         {{collapsed?'':sysName}}
@@ -45,13 +45,15 @@
                         </ul>
                     </template>
                     <template v-else>
-                <li class="submenu">
-                    <div class="submenu__title " style="padding-left: 20px;height: 56px;line-height: 56px;padding: 0 20px;" :class="$route.path==item.state?'is-active':''"
-                         @click="$router.push(item.state)">
-                        <Icon :type="item.icon"></Icon>
-                    </div>
-                </li>
-</template></li></ul></aside>
+                    <li class="submenu">
+                        <div class="submenu__title " style="padding-left: 20px;height: 56px;line-height: 56px;padding: 0 20px;" :class="$route.path==item.state?'is-active':''"
+                             @click="$router.push(item.state)">
+                            <Icon :type="item.icon"></Icon>
+                        </div>
+                    </li>
+                    </template></li>
+</ul>
+</aside>
 <section class="content-container">
     <div class="grid-content bg-purple-light">
         <Col span="24" class="breadcrumb-container">
@@ -175,7 +177,7 @@
 </script>
 
 <style scoped lang="scss" rel="stylesheet/scss">
-    .container {
+    .my-container {
         position: absolute;
         top: 0px;
         bottom: 0px;

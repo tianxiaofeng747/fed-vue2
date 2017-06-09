@@ -1,0 +1,142 @@
+<section>
+    <!--工具条-->
+    <Row>
+        <Col span="24" class="toolbar">
+        <Form inline>
+            <Form-item label="状态 : " :label-width="70">
+                <Select v-model="from.result.value" placeholder="请选择" class="w100 ">
+                    <Option v-for="item in from.result.options" :label="item.label" :value="item.value" :key="item.value"></Option>
+                </Select>
+            </Form-item>
+            <Form-item>
+                <Input placeholder="客户名称" v-model="from.keywords" class="w300"></Input>
+            </Form-item>
+            <Form-item>
+                <Button type="primary" @click="getList({pageIndex:1})">查询</Button>
+            </Form-item>
+            <Form-item>
+                <Button @click="reset">重置</Button>
+            </Form-item>
+        </Form>
+        </Col>
+        <Col span="24">
+        <Table border :columns="columns" :data="list.rows ||[]" style="width:100%"></Table>
+        </Col>
+        <Col span="24" class="toolbar">
+        <pagination :total="list.total" :pageSize="list.pageSize" @getList="getList"></pagination>
+        </Col>
+
+        <Modal
+                v-model="showDetail"
+                title="注册证详情"
+                @on-ok="cancel"
+                @on-cancel="cancel">
+            <div>
+                <table cellpadding="0" cellspacing="0" width="100%" class="table table-bordered">
+                    <colgroup  width="21%" ></colgroup>
+                    <colgroup  width="50%" ></colgroup>
+                    <colgroup  width="15%" ></colgroup>
+                    <colgroup  width="20%" ></colgroup>
+                    <tbody>
+                    <tr>
+                        <td class="ui-table-name ">注册证号</td>
+                        <td  colspan="3">{{ detail.certIssuedNo }}</td>
+                    </tr>
+                    <tr>
+                        <td class="ui-table-name ">产品名称</td>
+                        <td  colspan="3">{{ detail.productName}}</td>
+                    </tr>
+
+                    <tr>
+                        <td class="ui-table-name ">68分类</td>
+                        <td  colspan="3">{{detail.category68Code}}  {{ detail.category68Name?' | '+detail.category68Name:''}}{{detail.category68Type?' | '+detail.category68Type:''}}  </td>
+                    </tr>
+                    <tr>
+                        <td class="ui-table-name ">证件日期</td>
+                        <td  colspan="3">{{ detail.startTime}} 至 {{detail.isLong == '1'?'长期':detail.endTime}} </td>
+                    </tr>
+                    <tr>
+                        <td class="ui-table-name ">生产厂商</td>
+                        <td id="facEnterpriseName" colspan="3">{{ detail.facEnterpriseName}}</td>
+                    </tr>
+                    <tr>
+                        <td class="ui-table-name ">品牌名称</td>
+                        <td id="facAddr" colspan="3">{{ detail.brandName}}</td>
+                    </tr>
+                    <tr>
+                        <td class="ui-table-name">产地名称</td>
+                        <td colspan="3">{{ detail.facAddr}}</td>
+
+                    </tr>
+                    <tr>
+                        <td class="ui-table-name">产地类型</td>
+                        <td colspan="3">{{detail.isAbroad=='1' ? '境内' :'境外'}}</td>
+                    </tr>
+                    <tr>
+                        <td class="ui-table-name">发证机关</td>
+                        <td colspan="3">
+                            {{ detail.certificateAuthority}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="ui-table-name">存储条件</td>
+                        <td colspan="3">
+                            {{ detail.storeCondiValidtime}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="ui-table-name">有效周期</td>
+                        <td colspan="3">
+                            {{ detail.expiryDate}} {{detail.expiryUnitName}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="ui-table-name ">注册证产品规格</td>
+                        <td colspan="3">
+                            {{detail.qualityModel }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="ui-table-name ">证照图</td>
+                        <td colspan="3">
+                            <!--{{each detail.certImg as img}}
+                            <a href="{{ img.sourceUrl}}" class="boxer" style="display: inline-block">
+                                <i class="masterCert">主图</i>
+                                <img src="{{ img.url}}" alt="" width="60"/>
+                            </a>
+                            {{/each}}
+                            {{each registImgAttach as img}}
+                            <a href="{{ img.sourceUrl}}" class="boxer"  style="display: inline-block">
+                                <img src="{{ img.url}}" alt="" width="60"/>
+                            </a>
+                            {{/each}}-->
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="ui-table-name">结构及组成</td>
+                        <td colspan="3">{{detail.structureFrom}}</td>
+                    </tr>
+                    <tr>
+                        <td class="ui-table-name">适用范围(预期用途)</td>
+                        <td colspan="3">{{detail.rangeUse}}</td>
+                    </tr>
+                    <tr>
+                        <td class="ui-table-name">质量标准</td>
+                        <td colspan="3">{{detail.productStandards}}</td>
+                    </tr>
+                    <tr>
+                        <td class="ui-table-name">备注</td>
+                        <td colspan="3">{{detail.otherRemark}}</td>
+                    </tr>
+                    <tr v-show="detail.reason">
+                        <td class="ui-table-name">失败原因</td>
+                        <td colspan="3"><span class="red">{{detail.reason}}</span></td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </Modal>
+
+    </Row>
+</section>

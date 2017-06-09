@@ -22,6 +22,9 @@ const MENU = [{
         {
             name: '图片上传demo',
             state: 'File'
+        },{
+            name: '产品注册证',
+            state: 'certRegister'
         }
     ]
 }];

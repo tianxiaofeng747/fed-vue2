@@ -3,6 +3,7 @@ const table = r => require.ensure([], () => r(require('../pages/table/Table')), 
 const File = r => require.ensure([], () => r(require('../pages/imgUpload/File')), 'File')
 const chart = r => require.ensure([], () => r(require('../pages/chart/chart')), 'chart')
 import Auth from '../pages/auth/Auth';
+import CertRegister from  '../pages/certRegister/certRegister';
 export default [
     {
         path: '/', redirect: '/dashboard'
@@ -18,7 +19,12 @@ export default [
 		children: [
 			{path: '/table', component: table, name: 'table'},
 			{path: '/file', component: File, name: 'File'},
-			{path: '/chart', component: chart, name: 'chart'}
+			{path: '/chart', component: chart, name: 'chart'},
+            {
+                path:'/certRegister',
+                name:'certRegister',
+                component: CertRegister,
+            }
 		]
 	}
 ]
