@@ -1,7 +1,6 @@
 ﻿import axios from 'axios';
 import CONFIG from '../config/app.config';
 import iView from 'iview';
-import User from './User';
 //import loading from '@components/loading'
 
 class Interceptor {

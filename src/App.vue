@@ -7,7 +7,7 @@
 </template>
 
 <script>
-    import '@/assets/js/limonte-sweetalert2/5.3.5/sweetalert2.scss';
+    /*import '@/assets/js/limonte-sweetalert2/5.3.5/sweetalert2.scss';*/
     export default {
         name: 'app'
     }
