@@ -5,7 +5,20 @@
     import FileUpload from '@/components/FileUpload';
     const URL = {
         LIST: 'scm.cert.pageProductCert',
-        DETAIL:'scm.productAuthorize.getRegistDetail'
+        DETAIL: 'scm.productAuthorize.getRegistDetail'
+    };
+    let formMsg = () => {
+        return {
+            input: '',
+            select: '',
+            radio: 'male',
+            checkbox: [],
+            switch: true,
+            date: '',
+            time: '',
+            slider: [20, 50],
+            textarea: ''
+        }
     };
     export default {
         name: 'CertRegister',
@@ -117,31 +130,22 @@
                         key: 'oper',
                         width: 200,
                         render: (h, params) => {
-                            let  n = params.row;
+                            let n = params.row;
                             return (
                                     <div>
-                                        <i-button type="info" onClick={this.view.bind(this,params.row)} style={{marginRight: '5px'}} size="small">查看</i-button>
-                                        <i-button type="info" v-show={n.registStatus==3 && n.needUpdate == 1} onClick={this.update} style={{marginRight: '5px'}} size="small">更新</i-button>
-                                        <i-button type="info" v-show={n.registStatus==1 || n.registStatus == 4} onClick={this.edit } style={{marginRight: '5px'}} size="small">编辑</i-button>
+                                        <i-button type="info" onClick={this.view.bind(this, params.row)} style={{marginRight: '5px'}} size="small">查看</i-button>
+                                        <i-button type="info" v-show={n.registStatus == 3 && n.needUpdate == 1} onClick={this.update} style={{marginRight: '5px'}} size="small">更新
+                                        </i-button>
+                                        <i-button type="info" v-show={n.registStatus == 1 || n.registStatus == 4} onClick={this.edit } style={{marginRight: '5px'}} size="small">
+                                            编辑
+                                        </i-button>
                                     </div>)
                         }
                     }],
-                showDetail:false,
-                showAdd:false,
-                detail:{
-
-                },
-                formItem: {
-                    input: '',
-                    select: '',
-                    radio: 'male',
-                    checkbox: [],
-                    switch: true,
-                    date: '',
-                    time: '',
-                    slider: [20, 50],
-                    textarea: ''
-                },
+                showDetail: false,
+                showAdd: false,
+                detail: {},
+                formItem: formMsg(),
                 list: {
                     total: 0,
                     pageSize: 0
@@ -174,22 +178,24 @@
             },
             add(){
                 this.showAdd = true;
+                this.formItem = formMsg();
             },
             commit(){
 
             },
-            update(){},
+            update(){
+            },
             edit(){
 
             },
             view (item) {
                 let self = this,
                     id = item.basicProductNo;
-                this.Http.post(URL.DETAIL,{
-                    params:{
-                        basicProductNo:id
+                this.Http.post(URL.DETAIL, {
+                    params: {
+                        basicProductNo: id
                     }
-                }).then((result = {})=>{
+                }).then((result = {}) => {
                     self.detail = result.data;
                     self.showDetail = true;
                 });

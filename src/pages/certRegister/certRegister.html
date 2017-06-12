@@ -29,6 +29,7 @@
 
         <Modal
                 v-model="showDetail"
+                width="800"
                 title="注册证详情"
                 @on-ok="cancel"
                 @on-cancel="cancel">
@@ -135,7 +136,7 @@
                 @on-ok="commit"
                 @on-cancel="cancel">
             <div>
-                <Form :model="formItem" :label-width="80">
+                <Form :model="formItem" :label-width="80" >
                     <Form-item label="输入框">
                         <Input v-model="formItem.input" placeholder="请输入"></Input>
                     </Form-item>
