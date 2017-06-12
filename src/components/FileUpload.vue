@@ -5,7 +5,7 @@
                 <a :href="item.fullUrl" v-boxer="item.fullUrl">
                     <img :src="item.thumbnail">
                 </a>
-                <div class="demo-upload-list-cover">
+                <div class="demo-upload-list-cover" v-show="!readOnly">
                     <Icon type="ios-close-empty" @click.native="handleRemove(item)"></Icon>
                 </div>
             </template>
@@ -13,7 +13,7 @@
                 <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
             </template>
         </div>
-        <div class="demo-upload-block">
+        <div class="demo-upload-block" v-show="!readOnly">
             <Upload ref="upload" :show-upload-list="false" :default-file-list="defaultList" :on-success="handleSuccess" :format="['jpg','jpeg','png','pdf']" :max-size="5120"
                     :on-format-error="handleFormatError" :on-exceeded-size="handleMaxSize" :headers="headers"  :before-upload="handleBeforeUpload" multiple type="drag"
                     :action="config.IMAGE_UPLOAD">
@@ -60,9 +60,14 @@
             max: {
                 type: [Number, String]
             },
+            readOnly: {
+                type: [Boolean,String]
+            },
             fileList: {
-                type: Array,
-                default: []
+                type: [Array,String],
+                default: ()=>{
+                    return [];
+                }
             }
         },
         methods: {
@@ -149,7 +154,11 @@
             }
         },
         mounted(){
-            this.uploadList = this.$refs.upload.fileList;
+            let url = this.$refs.upload.fileList;
+            url = typeof url == 'string' ? url.split(';') : url instanceof Array ? url : null;
+            this.uploadList = url;
+
+
         }
     }
 </script>

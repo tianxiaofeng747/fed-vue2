@@ -2,6 +2,7 @@
 <script type="text/jsx">
     import pagination from '@/components/pagination';
     import dailog from '@/components/Dailog';
+    import FileUpload from '@/components/FileUpload';
     const URL = {
         LIST: 'scm.cert.pageProductCert',
         DETAIL:'scm.productAuthorize.getRegistDetail'
@@ -116,17 +117,30 @@
                         key: 'oper',
                         width: 200,
                         render: (h, params) => {
+                            let  n = params.row;
                             return (
                                     <div>
                                         <i-button type="info" onClick={this.view.bind(this,params.row)} style={{marginRight: '5px'}} size="small">查看</i-button>
-                                        <i-button type="info" onClick={this.update} style={{marginRight: '5px'}} size="small">更新</i-button>
-                                        <i-button type="info" onClick={this.edit } style={{marginRight: '5px'}} size="small">编辑</i-button>
+                                        <i-button type="info" v-show={n.registStatus==3 && n.needUpdate == 1} onClick={this.update} style={{marginRight: '5px'}} size="small">更新</i-button>
+                                        <i-button type="info" v-show={n.registStatus==1 || n.registStatus == 4} onClick={this.edit } style={{marginRight: '5px'}} size="small">编辑</i-button>
                                     </div>)
                         }
                     }],
                 showDetail:false,
+                showAdd:false,
                 detail:{
 
+                },
+                formItem: {
+                    input: '',
+                    select: '',
+                    radio: 'male',
+                    checkbox: [],
+                    switch: true,
+                    date: '',
+                    time: '',
+                    slider: [20, 50],
+                    textarea: ''
                 },
                 list: {
                     total: 0,
@@ -157,6 +171,12 @@
                     self.list = re.data;
 
                 })
+            },
+            add(){
+                this.showAdd = true;
+            },
+            commit(){
+
             },
             update(){},
             edit(){
@@ -202,6 +222,7 @@
         },
         components: {
             pagination,
+            FileUpload,
             dailog
         }
     }
